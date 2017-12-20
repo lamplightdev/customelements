@@ -6,9 +6,7 @@ const BaseElement = (parent, template = false) => {
     
     constructor() {
       super();
-    }
-    
-    connectedCallback() {
+      
       if (template) {
         this.attachShadow({mode: 'open'});
         let instance;
@@ -29,7 +27,7 @@ const BaseElement = (parent, template = false) => {
         this.$ = this.shadowRoot;
       }
       
-      this._props = {}; Object.assign({}, this.constructor.props);
+      this._props = {}; // Object.assign({}, this.constructor.props);
       
       if (this.constructor.props) {
         Object.keys(this.constructor.props).forEach((propName) => {
@@ -37,6 +35,10 @@ const BaseElement = (parent, template = false) => {
           this.set(propName, this.constructor.props[propName].value);
         });
       }
+    }
+    
+    connectedCallback() {
+
     }
     
     disconnectedCallback() {}
@@ -62,6 +64,8 @@ const BaseElement = (parent, template = false) => {
     }
     
     setProp(propName, oldValue, value) {
+      if (oldValue === value) return;
+      
       let adjustedNewValue = value;
       
       switch (this._props[propName].type) {

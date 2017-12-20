@@ -1,5 +1,6 @@
 import './counter.js';
 import './input.js';
+import './route.js';
 import './nav.js';
 
 import BaseElement from './base-element.js';
@@ -19,9 +20,10 @@ const template = `
   }
 </style>
 
-<h2 id="page-title"></h2>
-
+<pollaris-route defaultroute="page-1"></pollaris-route>
 <pollaris-nav></pollaris-nav>
+
+<h2 id="page-title"></h2>
 
 <div class="page" id="page-1">
   <template>
@@ -74,6 +76,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     
     this.onUpdateName = this.onUpdateName.bind(this);
     this.onUpdatePage = this.onUpdatePage.bind(this);
+    this.onUpdateRoute = this.onUpdateRoute.bind(this);
   }
   
   connectedCallback() {
@@ -81,12 +84,9 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     
     this.on(this, 'pollaris-updatename', this.onUpdateName);
     this.on(this, 'pollaris-updatepage', this.onUpdatePage);
+    this.on(this, 'pollaris-updateroute', this.onUpdateRoute);
     
-    if (window.location.hash) {
-      this.set('page', window.location.hash.substring(1));
-    } else {
-      this.set('page', 'page-1');
-    }
+    this.$.querySelector('pollaris-route').update();
   }
   
   observePage(oldValue, value) {
@@ -108,6 +108,8 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
       page.classList.add('active');
       
+      this.$.querySelector('pollaris-nav').set('active', value);
+      this.$.querySelector('pollaris-route').set('route', value);
       this.$.querySelector('#page-title').textContent = value;
     }
   }
@@ -140,10 +142,11 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
   
   onUpdatePage(event) {
-    const pageId = event.detail.pageId;
-    
-    this.set('page', pageId);
-    history.pushState({}, pageId, `#${pageId}`);
+    this.set('page', event.detail.pageId);
+  }
+  
+  onUpdateRoute(event) {
+    this.set('page', event.detail.route);
   }
 }
 
