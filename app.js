@@ -1,5 +1,6 @@
 import './counter.js';
 import './input.js';
+import './nav.js';
 
 import BaseElement from './base-element.js';
 
@@ -20,7 +21,7 @@ const template = `
 
 <h2 id="page-title"></h2>
 
-<a href="" class="to-page" page="page-1">Page 1</a> | <a href="" class="to-page" page="page-2">Page 2</a>
+<pollaris-nav></pollaris-nav>
 
 <div class="page" id="page-1">
   <template>
@@ -46,6 +47,18 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         observer: 'observePage',
       },
       
+      pages: {
+        type: Array,
+        value: [{
+          id: 'page-1',
+          name: 'Page 1',
+        }, {
+          id: 'page-2',
+          name: 'Page 2',
+        }],
+        observer: 'observePages',
+      },
+      
       data: {
         type: Object,
         value: {
@@ -60,28 +73,20 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     super();
     
     this.onUpdateName = this.onUpdateName.bind(this);
+    this.onUpdatePage = this.onUpdatePage.bind(this);
   }
   
   connectedCallback() {
     super.connectedCallback();
     
     this.on(this, 'pollaris-updatename', this.onUpdateName);
+    this.on(this, 'pollaris-updatepage', this.onUpdatePage);
     
     if (window.location.hash) {
       this.set('page', window.location.hash.substring(1));
     } else {
       this.set('page', 'page-1');
     }
-    
-    [...this.$.querySelectorAll('.to-page')].forEach((el) => {
-      this.on(el, 'click', (event) => {
-        event.preventDefault();
-        
-        const page = event.target.getAttribute('page');
-        this.set('page', page);
-        history.pushState({}, page, `#${page}`);
-      })
-    });
   }
   
   observePage(oldValue, value) {
@@ -107,6 +112,10 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     }
   }
   
+  observePages(oldValue, value) {
+    this.$.querySelector('pollaris-nav').set('pages', value);
+  }
+  
   observeData(oldValue, value) {
     const counter = this.$.querySelector('#counter');
     if (counter) {
@@ -128,6 +137,13 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.set('data', {
       name: event.detail.value,
     });
+  }
+  
+  onUpdatePage(event) {
+    const pageId = event.detail.pageId;
+    
+    this.set('page', pageId);
+    history.pushState({}, pageId, `#${pageId}`);
   }
 }
 
