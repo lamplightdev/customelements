@@ -6,11 +6,26 @@ const BaseElement = (parent, template = false) => {
     
     constructor() {
       super();
-      
+    }
+    
+    connectedCallback() {
       if (template) {
-        const fragment = document.createRange().createContextualFragment(template);
         this.attachShadow({mode: 'open'});
-        this.shadowRoot.appendChild(fragment);
+        let instance;
+        
+        if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+          const htmlTemplate = this._makeTemplate`${template}`;
+          
+          window.ShadyCSS.prepareTemplate(htmlTemplate, this.nodeName.toLowerCase());
+          window.ShadyCSS.styleElement(this);
+          
+          instance = htmlTemplate.content.cloneNode(true);
+        } else {
+          instance = document.createRange().createContextualFragment(template);
+        }
+        
+        this.shadowRoot.appendChild(instance);
+        
         this.$ = this.shadowRoot;
       }
       
@@ -24,9 +39,19 @@ const BaseElement = (parent, template = false) => {
       }
     }
     
-    connectedCallback() {}
-    
     disconnectedCallback() {}
+    
+    _makeTemplate (strings, ...substs) {
+      let html = '';
+      for (let i = 0; i < substs.length; i++) {
+          html += strings[i];
+          html += substs[i];
+      }
+      html += strings[strings.length - 1];
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      return template;
+    }
     
     set(propName, value) {
       if (this._props[propName].reflectToAttribute) {
