@@ -35,6 +35,14 @@ const template = `
 
 <div class="page" id="page-2">
   <h1>Page 2</h1>
+
+  <div id="items">
+    <template>
+      <span></span>
+    </template>
+
+    <div class="output"></div>
+  </div>
 </div>
 
 <slot></slot>
@@ -65,6 +73,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         type: Object,
         value: {
           name: 'Default',
+          items: ['A', 'B', 'C'],
         },
         observer: 'observeData',
       }
@@ -115,7 +124,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
   
   observePages(oldValue, value) {
-    this.$.querySelector('pollaris-nav').set('pages', value);
+    this.$.querySelector('pollaris-nav').set('items', value);
   }
   
   observeData(oldValue, value) {
@@ -132,6 +141,26 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     const input2 = this.$.querySelector('#input2');
     if (input2) {
       input2.set('value', value.name);
+    }
+    
+    if (value.items) {
+      const itemsEl = this.$.querySelector('#items');
+      
+      if (itemsEl) {
+        const itemTemplate = itemsEl.querySelector('template');
+        const output = itemsEl.querySelector('.output');
+
+        output.textContent = '';
+
+        value.items.forEach((item) => {
+          const instance = itemTemplate.content.cloneNode(true);
+          const span = instance.querySelector('span');
+
+          span.textContent = item;
+
+          output.appendChild(instance);
+        });
+      }
     }
   }
   

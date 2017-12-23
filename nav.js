@@ -1,4 +1,5 @@
 import BaseElement from './base-element.js';
+import PollarisRepeat from './repeat.js';
 
 const template = `
 <style>
@@ -16,17 +17,18 @@ const template = `
   }
 </style>
 
-<div id="links">
-  <template>
-    <a href=""></a>
-  </template>
-  
-  <div class="output"></div>
-</div>
+<template>
+  <a href=""></a>
+</template>
+
+<div class="output"></div>
 `;
 
+const repeater = () => {
+};
 
-class PollarisNav extends BaseElement(HTMLElement, template) {
+
+class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
   static get props() {
     return {
       active: {
@@ -35,10 +37,10 @@ class PollarisNav extends BaseElement(HTMLElement, template) {
         observer: 'observeActive',
       },
       
-      pages: {
+      items: {
         type: Array,
         value: [],
-        observer: 'observePages',
+        observer: 'observeItems',
       },
     };
   }
@@ -49,41 +51,29 @@ class PollarisNav extends BaseElement(HTMLElement, template) {
   
   connectedCallback() {
     super.connectedCallback();
+
   }
   
   observeActive(oldValue, value) {
     if (oldValue) {
-      this.$.querySelector('#links').querySelector(`a#${oldValue}`).classList.remove('active');
+      this.$.querySelector(`a#${oldValue}`).classList.remove('active');
     }
     
     if (value) {
-      this.$.querySelector('#links').querySelector(`a#${value}`).classList.add('active');
+      this.$.querySelector(`a#${value}`).classList.add('active');
     }
   }
   
-  observePages(oldValue, value) {
-    const linksEl = this.$.querySelector('#links');
-    const linkTemplate = linksEl.querySelector('template');
-    const output = linksEl.querySelector('.output');
-    
-    output.textContent = '';
-    
-    value.forEach((page) => {
-      const instance = linkTemplate.content.cloneNode(true);
-      const link = instance.querySelector('a');
-      
-      link.textContent = page.name;
-      link.id = page.id;
-      
-      this.on(link, 'click', (event) => {
-        event.preventDefault();
-        
-        this.fire('pollaris-updatepage', {
-          pageId: page.id,
-        });
+  initItemInstance(item, instance) {
+    instance.textContent = item.name;
+    instance.id = item.id;
+
+    this.on(instance, 'click', (event) => {
+      event.preventDefault();
+
+      this.fire('pollaris-updatepage', {
+        pageId: item.id,
       });
-      
-      output.appendChild(instance);
     });
   }
 }
