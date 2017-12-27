@@ -24,10 +24,6 @@ const template = `
 <div class="output"></div>
 `;
 
-const repeater = () => {
-};
-
-
 class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
   static get props() {
     return {
@@ -65,10 +61,12 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
   }
   
   initItemInstance(item, instance) {
-    instance.textContent = item.name;
-    instance.id = item.id;
+    const link = instance.querySelector('a');
+    
+    link.textContent = item.name;
+    link.id = item.id;
 
-    this.on(instance, 'click', (event) => {
+    this.on(link, 'click', (event) => {
       event.preventDefault();
 
       this.fire('pollaris-updatepage', {

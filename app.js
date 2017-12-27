@@ -2,6 +2,7 @@ import './counter.js';
 import './input.js';
 import './route.js';
 import './nav.js';
+import './items.js';
 
 import BaseElement from './base-element.js';
 
@@ -36,13 +37,7 @@ const template = `
 <div class="page" id="page-2">
   <h1>Page 2</h1>
 
-  <div id="items">
-    <template>
-      <span></span>
-    </template>
-
-    <div class="output"></div>
-  </div>
+  <pollaris-items></pollaris-items>
 </div>
 
 <slot></slot>
@@ -144,22 +139,10 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     }
     
     if (value.items) {
-      const itemsEl = this.$.querySelector('#items');
+      const itemsEl = this.$.querySelector('pollaris-items');
       
       if (itemsEl) {
-        const itemTemplate = itemsEl.querySelector('template');
-        const output = itemsEl.querySelector('.output');
-
-        output.textContent = '';
-
-        value.items.forEach((item) => {
-          const instance = itemTemplate.content.cloneNode(true);
-          const span = instance.querySelector('span');
-
-          span.textContent = item;
-
-          output.appendChild(instance);
-        });
+        itemsEl.set('items', value.items);
       }
     }
   }

@@ -1,13 +1,13 @@
-const PollarisRepeat = (parent,) => {
+const PollarisRepeat = (parent) => {
   return class extends parent {
-    observeItems(oldValue, value) {
+    observeItems(oldValues, values) {
       const template = this.$.querySelector('template');
       const output = this.$.querySelector('.output');
 
       output.textContent = '';
 
-      value.forEach((page) => {
-        const instance = template.cloneNode(true);
+      values.forEach((value) => {
+        const instance = template.content.cloneNode(true);
         
         this.initItemInstance(value, instance);
 
