@@ -2,12 +2,15 @@ import BaseElement from './base-element.js';
 
 const template = `
 <style>
-    :host {
-      display: block;
-      border: 1px solid red;
-      padding: 5px;
-      color: blue;
-    }
+  :host {
+    display: block;
+    border: 1px solid red;
+    padding: 5px;
+  }
+
+  h1 {
+    color: blue;
+  }
 </style>
 
 <h1>Hi <span id="name"></span>!</h1>

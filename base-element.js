@@ -8,13 +8,26 @@ const BaseElement = (parent, template = false) => {
       super();
       
       if (template) {
-        const fragment = document.createRange().createContextualFragment(template);
         this.attachShadow({mode: 'open'});
-        this.shadowRoot.appendChild(fragment);
+        let instance;
+        
+        if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+          const htmlTemplate = this._makeTemplate`${template}`;
+          
+          window.ShadyCSS.prepareTemplate(htmlTemplate, this.nodeName.toLowerCase());
+          window.ShadyCSS.styleElement(this);
+          
+          instance = htmlTemplate.content.cloneNode(true);
+        } else {
+          instance = document.createRange().createContextualFragment(template);
+        }
+        
+        this.shadowRoot.appendChild(instance);
+        
         this.$ = this.shadowRoot;
       }
       
-      this._props = {}; Object.assign({}, this.constructor.props);
+      this._props = {}; // Object.assign({}, this.constructor.props);
       
       if (this.constructor.props) {
         Object.keys(this.constructor.props).forEach((propName) => {
@@ -24,9 +37,23 @@ const BaseElement = (parent, template = false) => {
       }
     }
     
-    connectedCallback() {}
+    connectedCallback() {
+
+    }
     
     disconnectedCallback() {}
+    
+    _makeTemplate (strings, ...substs) {
+      let html = '';
+      for (let i = 0; i < substs.length; i++) {
+          html += strings[i];
+          html += substs[i];
+      }
+      html += strings[strings.length - 1];
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      return template;
+    }
     
     set(propName, value) {
       if (this._props[propName].reflectToAttribute) {
@@ -37,6 +64,8 @@ const BaseElement = (parent, template = false) => {
     }
     
     setProp(propName, oldValue, value) {
+      if (oldValue === value) return;
+      
       let adjustedNewValue = value;
       
       switch (this._props[propName].type) {
