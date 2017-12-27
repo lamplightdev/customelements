@@ -38,6 +38,10 @@ const template = `
   <h1>Page 2</h1>
 
   <pollaris-items></pollaris-items>
+
+  <form id="item">
+    <input type="text" value="">
+  </form>
 </div>
 
 <slot></slot>
@@ -81,6 +85,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.onUpdateName = this.onUpdateName.bind(this);
     this.onUpdatePage = this.onUpdatePage.bind(this);
     this.onUpdateRoute = this.onUpdateRoute.bind(this);
+    this.submitItemForm = this.submitItemForm.bind(this);
   }
   
   connectedCallback() {
@@ -89,6 +94,8 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.on(this, 'pollaris-updatename', this.onUpdateName);
     this.on(this, 'pollaris-updatepage', this.onUpdatePage);
     this.on(this, 'pollaris-updateroute', this.onUpdateRoute);
+    
+    this.on(this.$.querySelector('#item'), 'submit', this.submitItemForm);
     
     this.$.querySelector('pollaris-route').update();
   }
@@ -150,6 +157,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   onUpdateName(event) {
     this.set('data', {
       name: event.detail.value,
+      items: this.data.items.slice(),
     });
   }
   
@@ -159,6 +167,15 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   
   onUpdateRoute(event) {
     this.set('page', event.detail.route);
+  }
+  
+  submitItemForm(event) {
+    event.preventDefault();
+    
+    this.set('data', {
+      name: this.data.name,
+      items: event.target.querySelector('input').value.split(''),
+    });
   }
 }
 
