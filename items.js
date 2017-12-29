@@ -25,19 +25,19 @@ class PollarisItems extends PollarisRepeat(BaseElement(HTMLElement, template)) {
       },
     };
   }
-  
+
   constructor() {
     super();
   }
-  
+
   connectedCallback() {
     super.connectedCallback();
 
   }
-  
+
   initItemInstance(item, instance) {
     const span = instance.querySelector('span');
-    
+
     span.textContent = item;
   }
 }

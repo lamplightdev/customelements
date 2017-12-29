@@ -32,7 +32,7 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
         value: '',
         observer: 'observeActive',
       },
-      
+
       items: {
         type: Array,
         value: [],
@@ -40,29 +40,29 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
       },
     };
   }
-  
+
   constructor() {
     super();
   }
-  
+
   connectedCallback() {
     super.connectedCallback();
 
   }
-  
+
   observeActive(oldValue, value) {
     if (oldValue) {
       this.$.querySelector(`a#${oldValue}`).classList.remove('active');
     }
-    
+
     if (value) {
       this.$.querySelector(`a#${value}`).classList.add('active');
     }
   }
-  
+
   initItemInstance(item, instance) {
     const link = instance.querySelector('a');
-    
+
     link.textContent = item.name;
     link.id = item.id;
 

@@ -8,22 +8,14 @@ class PollarisRoute extends BaseElement(HTMLElement) {
         value: '',
         observer: 'observeRoute',
       },
-      
+
       defaultroute: {
         type: String,
         value: '',
       },
     };
   }
-  
-  constructor() {
-    super();
-  }
-  
-  connectedCallback() {
-    super.connectedCallback();
-  }
-  
+
   update() {
     if (window.location.hash) {
       this.set('route', window.location.hash.substring(1));
@@ -31,11 +23,11 @@ class PollarisRoute extends BaseElement(HTMLElement) {
       this.set('route', this.defaultroute);
     }
   }
-  
+
   observeRoute(oldValue, value) {
     if (value) {
       history.pushState({}, value, `#${value}`);
-      
+
       this.fire('pollaris-updateroute', {
         route: value,
       });
