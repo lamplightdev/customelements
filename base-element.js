@@ -32,7 +32,7 @@ const BaseElement = (parent, template = false) => {
       if (this.constructor.props) {
         Object.keys(this.constructor.props).forEach((propName) => {
           this._props[propName] = Object.assign({}, this.constructor.props[propName]);
-          this.set(propName, this.constructor.props[propName].value, typeof this.getAttribute(propName) === 'undefined');
+          this.set(propName, this.constructor.props[propName].value, !this.hasAttribute(propName));
         });
       }
     }
@@ -55,9 +55,34 @@ const BaseElement = (parent, template = false) => {
       return template;
     }
 
-    set(propName, value, allowReflection) {
+    set(propName, value, allowReflection = true) {
       if (allowReflection && this._props[propName].reflectToAttribute) {
-        this.setAttribute(propName, value);
+
+        let adjustedNewValue = value;
+
+        switch (this._props[propName].type) {
+          case String:
+            adjustedNewValue = `${value}`;
+            break;
+          case Number:
+            adjustedNewValue = Number(value);
+            break;
+          case Boolean:
+            adjustedNewValue = !!value;
+            break;
+          default:
+            break;
+        }
+
+        if (this._props[propName].type === Boolean) {
+          if (adjustedNewValue) {
+            this.setAttribute(propName, '');
+          } else {
+            this.removeAttribute(propName);
+          }
+        } else {
+          this.setAttribute(propName, adjustedNewValue);
+        }
       } else {
         this.setProp(propName, this[propName], value);
       }
@@ -74,6 +99,10 @@ const BaseElement = (parent, template = false) => {
           break;
         case Number:
           adjustedNewValue = Number(value);
+          break;
+        case Boolean:
+          adjustedNewValue = !!value;
+          break;
         default:
           break;
       }

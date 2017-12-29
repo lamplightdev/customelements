@@ -90,6 +90,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         type: Boolean,
         value: false,
         observer: 'observeLoading',
+        reflectToAttribute: true,
       }
     }
   }
