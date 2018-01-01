@@ -37,15 +37,13 @@ const BaseElement = (parent, template = false) => {
             this[propName] = undefined;
             this.set(propName, value);
           } else {
-            this.set(propName, this.constructor.props[propName].value, !this.hasAttribute(propName));
+            this.set(propName, this.constructor.props[propName].value, !this.hasAttribute(propName), true);
           }
         });
       }
     }
 
-    connectedCallback() {
-
-    }
+    connectedCallback() {}
 
     disconnectedCallback() {}
 
@@ -61,7 +59,7 @@ const BaseElement = (parent, template = false) => {
       return template;
     }
 
-    set(propName, value, allowReflection = true) {
+    set(propName, value, allowReflection = true, fromInitialisation = false) {
       if (allowReflection && this._props[propName].reflectToAttribute) {
 
         let adjustedNewValue = value;
@@ -76,6 +74,9 @@ const BaseElement = (parent, template = false) => {
           case Boolean:
             adjustedNewValue = !!value;
             break;
+          case Object: case Array:
+            adjustedNewValue = JSON.stringify(value);
+            break;
           default:
             break;
         }
@@ -89,13 +90,17 @@ const BaseElement = (parent, template = false) => {
         } else {
           this.setAttribute(propName, adjustedNewValue);
         }
+
+        if (fromInitialisation) {
+          // attributeChangedCallback isn't called on initialisation of an attribute
+          this.setProp(propName, this[propName], value);
+        }
       } else {
         this.setProp(propName, this[propName], value);
       }
     }
 
     setProp(propName, oldValue, value) {
-      console.log(propName, oldValue, value);
       if (oldValue === value) return;
 
       let adjustedNewValue = value;
@@ -122,18 +127,26 @@ const BaseElement = (parent, template = false) => {
     }
 
     attributeChangedCallback(name, oldValue, value) {
-      if (this._props[name].type === Boolean) {
-        let adjustedOldValue = oldValue;
-        let adjustedNewValue = value;
-        if (adjustedOldValue !== undefined) {
-          adjustedOldValue = adjustedOldValue === '' ? true : false;
+      switch (this._props[name].type) {
+        case Boolean: {
+          let adjustedOldValue = oldValue;
+          let adjustedNewValue = value;
+          if (adjustedOldValue !== undefined) {
+            adjustedOldValue = adjustedOldValue === '' ? true : false;
+          }
+          if (adjustedNewValue !== undefined) {
+            adjustedNewValue = adjustedNewValue === '' ? true : false;
+          }
+          this.setProp(name, adjustedOldValue, adjustedNewValue);
+          break;
         }
-        if (adjustedNewValue !== undefined) {
-          adjustedNewValue = adjustedNewValue === '' ? true : false;
+        case Object: case Array: {
+          this.setProp(name, JSON.parse(oldValue), JSON.parse(value));
+          break;
         }
-        this.setProp(name, adjustedOldValue, adjustedNewValue);
-      } else {
-        this.setProp(name, oldValue, value);
+        default:
+          this.setProp(name, oldValue, value);
+          break;
       }
     }
 

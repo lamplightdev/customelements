@@ -64,6 +64,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         type: String,
         value: '',
         observer: 'observePage',
+        reflectToAttribute: true,
       },
 
       pages: {
@@ -85,6 +86,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
           items: ['1', '2', '3'],
         },
         observer: 'observeData',
+        reflectToAttribute: true,
       },
 
       loading: {
