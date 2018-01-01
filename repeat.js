@@ -4,6 +4,8 @@ const PollarisRepeat = (parent) => {
       super();
     }
 
+    // TODO: key items?
+
     _addItem(template, value, output) {
       const instance = template.content.cloneNode(true);
 
@@ -12,12 +14,8 @@ const PollarisRepeat = (parent) => {
       output.appendChild(instance);
     }
 
-    _replaceItem(template, value, output, index) {
-      const instance = template.content.cloneNode(true);
-
-      this.initItemInstance(value, instance);
-
-      output.replaceChild(instance, output.children[index]);
+    _updateItem(value, index) {
+      this.updateItemInstance(value, index);
     }
 
     _removeItem(output, index) {
@@ -32,7 +30,7 @@ const PollarisRepeat = (parent) => {
         if (!output.children[index]) {
           this._addItem(template, value, output);
         } else if (value !== oldValues[index]) {
-          this._replaceItem(template, value, output, index);
+          this._updateItem(value, index);
         }
       });
 

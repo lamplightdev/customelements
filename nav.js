@@ -74,6 +74,8 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
       });
     });
   }
+
+  updateItemInstance(item, index) {}
 }
 
 customElements.define('pollaris-nav', PollarisNav);

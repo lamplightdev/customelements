@@ -4,6 +4,7 @@ import './route.js';
 import './nav.js';
 import './items.js';
 import './store.js';
+import './test.js';
 
 
 import BaseElement from './base-element.js';

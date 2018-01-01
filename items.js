@@ -1,3 +1,5 @@
+
+
 import BaseElement from './base-element.js';
 import PollarisRepeat from './repeat.js';
 
@@ -9,7 +11,7 @@ const template = `
 </style>
 
 <template>
-  <span></span>
+  <pollaris-test></pollaris-test>
 </template>
 
 <div class="output"></div>
@@ -36,9 +38,15 @@ class PollarisItems extends PollarisRepeat(BaseElement(HTMLElement, template)) {
   }
 
   initItemInstance(item, instance) {
-    const span = instance.querySelector('span');
+    const test = instance.querySelector('pollaris-test');
 
-    span.textContent = item;
+    // cannot use .set() here as the custom element won't have been constructed yet
+    // instead we set the property manually which will be picked up on construction
+    test.content = item;
+  }
+
+  updateItemInstance(item, index) {
+    this.$.querySelector(`.output pollaris-test:nth-child(${index + 1})`).set('content', item);
   }
 }
 

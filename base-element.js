@@ -32,7 +32,13 @@ const BaseElement = (parent, template = false) => {
       if (this.constructor.props) {
         Object.keys(this.constructor.props).forEach((propName) => {
           this._props[propName] = Object.assign({}, this.constructor.props[propName]);
-          this.set(propName, this.constructor.props[propName].value, !this.hasAttribute(propName));
+          if (typeof this[propName] !== 'undefined') {
+            const value = this[propName];
+            this[propName] = undefined;
+            this.set(propName, value);
+          } else {
+            this.set(propName, this.constructor.props[propName].value, !this.hasAttribute(propName));
+          }
         });
       }
     }
@@ -89,6 +95,7 @@ const BaseElement = (parent, template = false) => {
     }
 
     setProp(propName, oldValue, value) {
+      console.log(propName, oldValue, value);
       if (oldValue === value) return;
 
       let adjustedNewValue = value;
@@ -115,7 +122,19 @@ const BaseElement = (parent, template = false) => {
     }
 
     attributeChangedCallback(name, oldValue, value) {
-      this.setProp(name, oldValue, value);
+      if (this._props[name].type === Boolean) {
+        let adjustedOldValue = oldValue;
+        let adjustedNewValue = value;
+        if (adjustedOldValue !== undefined) {
+          adjustedOldValue = adjustedOldValue === '' ? true : false;
+        }
+        if (adjustedNewValue !== undefined) {
+          adjustedNewValue = adjustedNewValue === '' ? true : false;
+        }
+        this.setProp(name, adjustedOldValue, adjustedNewValue);
+      } else {
+        this.setProp(name, oldValue, value);
+      }
     }
 
     on(el, type, func) {

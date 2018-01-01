@@ -1,0 +1,37 @@
+import BaseElement from './base-element.js';
+
+const template = `
+<style>
+  :host {
+    display: block;
+  }
+</style>
+
+<span></span>
+`;
+
+class PollarisTest extends BaseElement(HTMLElement, template) {
+  static get props() {
+    return {
+      content: {
+        type: String,
+        value: '',
+        observer: 'observeContent',
+      },
+    };
+  }
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  observeContent(oldValue, value) {
+    this.$.querySelector('span').textContent = value;
+  }
+}
+
+customElements.define('pollaris-test', PollarisTest);
