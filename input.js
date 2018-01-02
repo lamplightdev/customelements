@@ -9,7 +9,7 @@ const template = `
   }
 </style>
 
-<input id="input" type="text" value="">
+<input id="input" type="text" value="" on-change="onChange">
 `;
 
 class PollarisInput extends BaseElement(HTMLElement, template) {
@@ -22,23 +22,17 @@ class PollarisInput extends BaseElement(HTMLElement, template) {
       },
     };
   }
-  
+
   constructor() {
     super();
-    
+
     this.onChange = this.onChange.bind(this);
   }
-  
-  connectedCallback() {
-    super.connectedCallback();
-    
-    this.on(this.$.querySelector('#input'), 'change', this.onChange);
-  }
-  
+
   observeValue(oldValue, newValue) {
     this.$.querySelector('#input').value = newValue;
   }
-  
+
   onChange(event) {
     this.fire('pollaris-updatename', {
       value: event.target.value,

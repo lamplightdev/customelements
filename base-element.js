@@ -43,9 +43,33 @@ const BaseElement = (parent, template = false) => {
       }
     }
 
-    connectedCallback() {}
+    connectedCallback() {
+      if (this.$) {
+        const eventTypes = ['click', 'submit', 'change'];
 
-    disconnectedCallback() {}
+        eventTypes.forEach((eventType) => {
+          const attr = `on-${eventType}`;
+
+          this.$.querySelectorAll(`[${attr}]`).forEach((el) => {
+            el.addEventListener(eventType, this[el.getAttribute(attr)]);
+          });
+        });
+      }
+    }
+
+    disconnectedCallback() {
+      if (this.$) {
+        const eventTypes = ['click', 'submit', 'change'];
+
+        eventTypes.forEach((eventType) => {
+          const attr = `on-${eventType}`;
+
+          this.$.querySelectorAll(`[${attr}]`).forEach((el) => {
+            el.removeEventListener(eventType, this[el.getAttribute(attr)]);
+          });
+        });
+      }
+    }
 
     _makeTemplate (strings, ...substs) {
       let html = '';

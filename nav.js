@@ -18,7 +18,7 @@ const template = `
 </style>
 
 <template>
-  <a href=""></a>
+  <a href="" on-click="navigate"></a>
 </template>
 
 <div class="output"></div>
@@ -41,6 +41,12 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
     };
   }
 
+  constructor() {
+    super();
+
+    this.navigate = this.navigate.bind(this);
+  }
+
   observeActive(oldValue, value) {
     if (oldValue) {
       this.$.querySelector(`a#${oldValue}`).classList.remove('active');
@@ -54,15 +60,16 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
   initItemInstance(item, instance) {
     const link = instance.querySelector('a');
 
+    link.setAttribute('href', `#${item.id}`);
     link.textContent = item.name;
     link.id = item.id;
+  }
 
-    this.on(link, 'click', (event) => {
-      event.preventDefault();
+  navigate(item, event) {
+    event.preventDefault();
 
-      this.fire('pollaris-updatepage', {
-        pageId: item.id,
-      });
+    this.fire('pollaris-updatepage', {
+      pageId: item.id,
     });
   }
 

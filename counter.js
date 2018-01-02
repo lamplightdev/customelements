@@ -13,7 +13,7 @@ const template = `
   }
 </style>
 
-<h1>Hi <span id="name"></span>!</h1>
+<h1>Hi <span id="name" on-click="test"></span>!</h1>
 <slot name="me"></slot>
 `;
 
@@ -25,13 +25,13 @@ class PollarisCounter extends BaseElement(HTMLElement, template) {
         value: 'No name',
         observer: 'observeName',
       },
-      
+
       a: {
         type: String,
         value: 'This is A',
         observer: 'observeA',
       },
-      
+
       b: {
         type: Number,
         value: -1,
@@ -42,30 +42,26 @@ class PollarisCounter extends BaseElement(HTMLElement, template) {
 
   constructor() {
     super();
-    
+
     this.test = this.test.bind(this);
   }
-  
+
   connectedCallback() {
     super.connectedCallback();
-    
-    this.on(this.$.querySelector('h1'), 'click', this.test);
   }
-  
+
   disconnectedCallback() {
     super.disconnectedCallback();
-    
-    this.off(this.$.querySelector('h1'), 'click', this.test);
   }
-  
+
   test() {
     console.log('woo', this);
   }
-  
+
   observeName(oldValue, newValue) {
     this.$.querySelector('#name').textContent = newValue;
   }
-  
+
   observeA(oldValue, newValue) {
     console.log('A', oldValue, newValue);
   }

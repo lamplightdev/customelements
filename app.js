@@ -5,6 +5,9 @@ import './nav.js';
 import './items.js';
 import './store.js';
 import './test.js';
+import './list.js';
+import './listitems.js';
+import './listitem.js';
 
 
 import BaseElement from './base-element.js';
@@ -29,6 +32,8 @@ const template = `
 </style>
 
 <pollaris-store name="data"></pollaris-store>
+<pollaris-store name="list"></pollaris-store>
+
 <pollaris-route defaultroute="page-1"></pollaris-route>
 <pollaris-nav></pollaris-nav>
 
@@ -44,13 +49,15 @@ const template = `
   </div>
 
   <div class="page" id="page-2">
-    <h1>Page 2</h1>
-
     <pollaris-items></pollaris-items>
 
-    <form id="item">
+    <form id="item" on-submit="submitItemForm">
       <input type="text" value="">
     </form>
+  </div>
+
+  <div class="page" id="page-3">
+    <pollaris-list></pollaris-list>
   </div>
 
   <slot></slot>
@@ -75,8 +82,20 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         }, {
           id: 'page-2',
           name: 'Page 2',
+        }, {
+          id: 'page-3',
+          name: 'Page 3 (List)',
         }],
         observer: 'observePages',
+      },
+
+      list: {
+        type: Object,
+        value: {
+          name: 'My List',
+          items: [],
+        },
+        observer: 'observeList',
       },
 
       data: {
@@ -86,7 +105,6 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
           items: ['1', '2', '3'],
         },
         observer: 'observeData',
-        reflectToAttribute: true,
       },
 
       loading: {
@@ -106,6 +124,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.onUpdateRoute = this.onUpdateRoute.bind(this);
     this.onLoadStore = this.onLoadStore.bind(this);
     this.submitItemForm = this.submitItemForm.bind(this);
+    this.onUpdateList = this.onUpdateList.bind(this);
   }
 
   connectedCallback() {
@@ -115,8 +134,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.on(this, 'pollaris-updatepage', this.onUpdatePage);
     this.on(this, 'pollaris-updateroute', this.onUpdateRoute);
     this.on(this, 'pollaris-loadstore', this.onLoadStore);
-
-    this.on(this.$.querySelector('#item'), 'submit', this.submitItemForm);
+    this.on(this, 'pollaris-updatelist', this.onUpdateList);
 
     this.$.querySelector('pollaris-route').update();
     this.set('loading', true);
@@ -151,8 +169,23 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
       this.$.querySelector('pollaris-nav').set('active', value);
       this.$.querySelector('pollaris-route').set('route', value);
-      this.$.querySelector('#page-title').textContent = value;
+      this.$.querySelector('#page-title').textContent = this.pages.find(page => page.id === value).name;
+
+      switch (value) {
+        case 'page-3':
+          this.initPage3();
+          break;
+        default:
+          break;
+      }
     }
+  }
+
+  initPage3() {
+    const list = this.$.querySelector('#page-3 pollaris-list');
+
+    list.set('name', this.list.name);
+    list.set('items', this.list.items);
   }
 
   observePages(oldValue, value) {
@@ -183,7 +216,22 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
       }
     }
 
-    this.$.querySelector('pollaris-store').update(value);
+    this.$.querySelector('pollaris-store[name=data]').update(value);
+  }
+
+  observeList(oldValue, value) {
+    if (this.page === 'page-3') {
+      this.initPage3();
+    }
+
+    this.$.querySelector('pollaris-store[name=list]').update(value);
+  }
+
+  onUpdateList(event) {
+    this.set('list', {
+      name: event.detail.name,
+      items: event.detail.items,
+    });
   }
 
   onUpdateName(event) {
@@ -211,8 +259,12 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
 
   onLoadStore(event) {
-    if (event.detail && event.detail.name === 'data') {
-      this.set('data', event.detail.store);
+    if (event.detail) {
+      if (event.detail.name === 'data') {
+        this.set('data', event.detail.store);
+      } else if (event.detail.name === 'list') {
+        this.set('list', event.detail.store);
+      }
     }
 
     this.set('loading', false);

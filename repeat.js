@@ -2,10 +2,20 @@ const PollarisRepeat = (parent) => {
   return class extends parent {
     // TODO: key items?
 
-    _addItem(template, value, output) {
+    _addItem(template, value, output, index) {
       const instance = template.content.cloneNode(true);
 
-      this.initItemInstance(value, instance);
+      this.initItemInstance(value, instance, index);
+
+      const eventTypes = ['click', 'submit', 'change'];
+
+      eventTypes.forEach((eventType) => {
+        const attr = `on-${eventType}`;
+
+        instance.querySelectorAll(`[${attr}]`).forEach((el) => {
+          el.addEventListener(eventType, this[el.getAttribute(attr)].bind(null, value));
+        });
+      });
 
       output.appendChild(instance);
     }
@@ -24,7 +34,7 @@ const PollarisRepeat = (parent) => {
 
       values.forEach((value, index) => {
         if (!output.children[index]) {
-          this._addItem(template, value, output);
+          this._addItem(template, value, output, index);
         } else if (value !== oldValues[index]) {
           this._updateItem(value, index);
         }
