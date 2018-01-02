@@ -21,14 +21,6 @@ class PollarisTest extends BaseElement(HTMLElement, template) {
     };
   }
 
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
   observeContent(oldValue, value) {
     this.$.querySelector('span').textContent = value;
   }

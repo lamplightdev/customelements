@@ -28,15 +28,6 @@ class PollarisItems extends PollarisRepeat(BaseElement(HTMLElement, template)) {
     };
   }
 
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-  }
-
   initItemInstance(item, instance) {
     const test = instance.querySelector('pollaris-test');
 

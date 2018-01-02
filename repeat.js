@@ -1,9 +1,5 @@
 const PollarisRepeat = (parent) => {
   return class extends parent {
-    constructor() {
-      super();
-    }
-
     // TODO: key items?
 
     _addItem(template, value, output) {
