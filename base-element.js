@@ -32,13 +32,21 @@ const BaseElement = (parent, template = false) => {
       if (this.constructor.props) {
         Object.keys(this.constructor.props).forEach((propName) => {
           this._props[propName] = Object.assign({}, this.constructor.props[propName]);
+
+          let value;
           if (typeof this[propName] !== 'undefined') {
-            const value = this[propName];
-            this[propName] = undefined;
-            this.set(propName, value);
+            value = this[propName];
           } else {
-            this.set(propName, this.constructor.props[propName].value, !this.hasAttribute(propName), true);
+            value = this.constructor.props[propName].value
           }
+
+          // define property setter and getter after we have accessed raw property above
+          Object.defineProperty(this, propName, {
+            get: () => { return this._props[propName].value; },
+            set: (value) => { this.set(propName, value); },
+          });
+
+          this.set(propName, value, !this.hasAttribute(propName), true);
         });
       }
     }
@@ -143,7 +151,7 @@ const BaseElement = (parent, template = false) => {
           break;
       }
 
-      this[propName] = adjustedNewValue;
+      this._props[propName].value = adjustedNewValue;
 
       if (this[this._props[propName].observer]) {
         this[this._props[propName].observer](oldValue, this[propName]);

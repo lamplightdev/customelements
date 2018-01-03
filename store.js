@@ -18,7 +18,7 @@ class PollarisStore extends BaseElement(HTMLElement) {
     if (store !== null) {
       store = JSON.parse(store);
 
-      this.set('store', store);
+      this.store = store;
 
       setTimeout(() => {
         this.fire('pollaris-loadstore', {
@@ -43,7 +43,7 @@ class PollarisStore extends BaseElement(HTMLElement) {
   update(store) {
     localStorage.setItem(`pollaris-${this.getAttribute('name')}`, JSON.stringify(store));
 
-    this.set('store', store);
+    this.store = store;
   }
 }
 

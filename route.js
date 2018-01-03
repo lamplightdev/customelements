@@ -18,9 +18,9 @@ class PollarisRoute extends BaseElement(HTMLElement) {
 
   update() {
     if (window.location.hash) {
-      this.set('route', window.location.hash.substring(1));
+      this.route = window.location.hash.substring(1);
     } else if (this.defaultroute) {
-      this.set('route', this.defaultroute);
+      this.route = this.defaultroute;
     }
   }
 

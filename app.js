@@ -122,7 +122,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.on(this, 'pollaris-loadstore', this.onLoadStore);
 
     this.$.querySelector('pollaris-route').update();
-    this.set('loading', true);
+    this.loading = true;
   }
 
   observeLoading(oldValue, value) {
@@ -208,44 +208,44 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
 
   onUpdateList(event) {
-    this.set('list', {
+    this.list = {
       name: event.detail.name,
       items: event.detail.items,
-    });
+    };
   }
 
   onUpdateName(event) {
-    this.set('data', {
+    this.data = {
       name: event.detail.value,
       items: this.data.items.slice(),
-    });
+    };
   }
 
   onUpdateItems(event) {
-    this.set('data', {
+    this.data = {
       name: this.data.name,
       items: event.detail.items,
-    });
+    };
   }
 
   onUpdatePage(event) {
-    this.set('page', event.detail.pageId);
+    this.page = event.detail.pageId;
   }
 
   onUpdateRoute(event) {
-    this.set('page', event.detail.route);
+    this.page = event.detail.route;
   }
 
   onLoadStore(event) {
     if (event.detail) {
       if (event.detail.name === 'data') {
-        this.set('data', event.detail.store);
+        this.data = event.detail.store;
       } else if (event.detail.name === 'list') {
-        this.set('list', event.detail.store);
+        this.list = event.detail.store;
       }
     }
 
-    this.set('loading', false);
+    this.loading = false;
   }
 }
 

@@ -48,10 +48,10 @@ class PollarisPage3 extends BaseElement(HTMLElement, template) {
         .then(response => response.json());
     }));
 
-    this.set('hn', {
+    this.hn = {
       name: this.hn.name,
       items: stories,
-    });
+    };
   }
 
   observeList(oldValue, value) {
