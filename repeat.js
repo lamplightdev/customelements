@@ -13,7 +13,7 @@ const PollarisRepeat = (parent) => {
         const attr = `on-${eventType}`;
 
         instance.querySelectorAll(`[${attr}]`).forEach((el) => {
-          el.addEventListener(eventType, this[el.getAttribute(attr)].bind(null, value));
+          el.addEventListener(eventType, this[el.getAttribute(attr)].bind(null, value, index));
         });
       });
 

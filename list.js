@@ -29,6 +29,11 @@ class PollarisList extends BaseElement(HTMLElement, template) {
         type: Array,
         value: [],
         observer: 'observeItems',
+      },
+
+      eventname: {
+        type: String,
+        value: 'updatelist',
       }
     };
   }
@@ -38,6 +43,14 @@ class PollarisList extends BaseElement(HTMLElement, template) {
 
     this.update = this.update.bind(this);
     this.clear = this.clear.bind(this);
+
+    this.removeFromList = this.removeFromList.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.on(this, 'pollaris-removefromlist', this.removeFromList);
   }
 
   observeName(oldValue, value) {
@@ -50,7 +63,7 @@ class PollarisList extends BaseElement(HTMLElement, template) {
 
   update(event) {
     const now = Date.now();
-    this.fire('pollaris-updatelist', {
+    this.fire(`pollaris-${this.eventname}`, {
       name: now,
       items: this.items.concat({
         content: now,
@@ -61,9 +74,21 @@ class PollarisList extends BaseElement(HTMLElement, template) {
 
   clear(event) {
     const now = Date.now();
-    this.fire('pollaris-updatelist', {
+    this.fire(`pollaris-${this.eventname}`, {
       name: now,
       items: [],
+    });
+  }
+
+  removeFromList(event) {
+    const { index } = event.detail;
+
+    const items = this.items.slice();
+    items.splice(index, 1);
+
+    this.fire(`pollaris-${this.eventname}`, {
+      name: this.name,
+      items,
     });
   }
 }

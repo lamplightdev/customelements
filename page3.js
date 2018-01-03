@@ -9,7 +9,7 @@ const template = `
 </style>
 
 <pollaris-list id="list"></pollaris-list>
-<pollaris-list id="hn"></pollaris-list>
+<pollaris-list id="hn" eventname="updatehn"></pollaris-list>
 `;
 
 class PollarisPage3 extends BaseElement(HTMLElement, template) {

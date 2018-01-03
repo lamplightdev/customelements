@@ -65,7 +65,7 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
     link.id = item.id;
   }
 
-  navigate(item, event) {
+  navigate(item, index, event) {
     event.preventDefault();
 
     this.fire('pollaris-updatepage', {

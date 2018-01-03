@@ -13,7 +13,10 @@ const template = `
 </style>
 
 <template>
-  <pollaris-listitem></pollaris-listitem>
+  <div>
+    <pollaris-listitem></pollaris-listitem>
+    <button on-click="remove">x</button>
+  </div>
 </template>
 
 <div class="output"></div>
@@ -30,6 +33,12 @@ class PollarisListItems extends PollarisRepeat(BaseElement(HTMLElement, template
     };
   }
 
+  constructor() {
+    super();
+
+    this.remove = this.remove.bind(this);
+  }
+
   initItemInstance(item, instance, index) {
     const test = instance.querySelector('pollaris-listitem');
 
@@ -40,9 +49,15 @@ class PollarisListItems extends PollarisRepeat(BaseElement(HTMLElement, template
   }
 
   updateItemInstance(item, index) {
-    const el = this.$.querySelector(`.output pollaris-listitem:nth-child(${index + 1})`)
-    el.set('ident', item.due);
+    const el = this.$.querySelectorAll(`.output pollaris-listitem`)[index]
+    el.set('due', item.due);
     el.set('content', item.content);
+  }
+
+  remove(item, index, event) {
+    this.fire(`pollaris-removefromlist`, {
+      index,
+    });
   }
 }
 
