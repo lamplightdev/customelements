@@ -27,7 +27,7 @@ const BaseElement = (parent, template = false) => {
         this.$ = this.shadowRoot;
       }
 
-      this._props = {}; // Object.assign({}, this.constructor.props);
+      this._props = {};
 
       if (this.constructor.props) {
         Object.keys(this.constructor.props).forEach((propName) => {

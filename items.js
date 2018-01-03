@@ -33,8 +33,6 @@ class PollarisItems extends PollarisRepeat(BaseElement(HTMLElement, template)) {
   initItemInstance(item, instance) {
     const test = instance.querySelector('pollaris-test');
 
-    // cannot use .set() here as the custom element won't have been constructed yet
-    // instead we set the property manually which will be picked up on construction
     test.content = item;
   }
 

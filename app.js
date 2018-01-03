@@ -46,6 +46,8 @@ const template = `
 
   <slot></slot>
 </div>
+
+<pollaris-nav></pollaris-nav>
 `;
 
 class PollarisApp extends BaseElement(HTMLElement, template) {
@@ -143,7 +145,9 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
       page.classList.add('active');
 
-      this.$.querySelector('pollaris-nav').set('active', value);
+      [...this.$.querySelectorAll('pollaris-nav')]
+        .map(el => el.set('active', value));
+
       this.$.querySelector('pollaris-route').set('route', value);
       this.$.querySelector('#page-title').textContent
         = this.pages.find(page => page.id === value).name;
@@ -183,7 +187,8 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
 
   observePages(oldValue, value) {
-    this.$.querySelector('pollaris-nav').set('items', value);
+    [...this.$.querySelectorAll('pollaris-nav')]
+      .map(el => el.set('items', value));
   }
 
   observeData(oldValue, value) {
