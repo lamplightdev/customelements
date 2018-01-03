@@ -1,4 +1,5 @@
 import BaseElement from './base-element.js';
+import './listitems.js';
 
 const template = `
 <style>

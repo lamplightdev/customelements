@@ -3,6 +3,8 @@
 import BaseElement from './base-element.js';
 import PollarisRepeat from './repeat.js';
 
+import './listitem.js';
+
 const template = `
 <style>
   :host {
