@@ -38,17 +38,11 @@ const template = `
 <div id="content">
   <h2 id="page-title"></h2>
 
-  <div class="page" id="page-1">
-    <pollaris-page1></pollaris-page1>
-  </div>
+  <pollaris-page1 class="page" id="page-1"></pollaris-page1>
 
-  <div class="page" id="page-2">
-    <pollaris-page2></pollaris-page2>
-  </div>
+  <pollaris-page2 class="page" id="page-2"></pollaris-page2>
 
-  <div class="page" id="page-3">
-    <pollaris-page3></pollaris-page3>
-  </div>
+  <pollaris-page3 class="page" id="page-3"></pollaris-page3>
 
   <slot></slot>
 </div>

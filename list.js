@@ -60,8 +60,6 @@ class PollarisList extends BaseElement(HTMLElement, template) {
   }
 
   clear(event) {
-    console.log(event.target);
-
     const now = Date.now();
     this.fire('pollaris-updatelist', {
       name: now,
