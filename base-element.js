@@ -53,7 +53,13 @@ const BaseElement = (parent, template = false) => {
 
     connectedCallback() {
       if (this.$) {
-        const eventTypes = ['click', 'submit', 'change'];
+        const eventTypes = [];
+        for (let property in this) {
+          const match = property.match(/^on(.*)/)
+          if (match) {
+            eventTypes.push(match[1]);
+          }
+        }
 
         eventTypes.forEach((eventType) => {
           const attr = `on-${eventType}`;
@@ -67,7 +73,13 @@ const BaseElement = (parent, template = false) => {
 
     disconnectedCallback() {
       if (this.$) {
-        const eventTypes = ['click', 'submit', 'change'];
+        const eventTypes = [];
+        for (let property in this) {
+          const match = property.match(/^on(.*)/)
+          if (match) {
+            eventTypes.push(match[1]);
+          }
+        }
 
         eventTypes.forEach((eventType) => {
           const attr = `on-${eventType}`;

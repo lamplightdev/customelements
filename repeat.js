@@ -7,7 +7,13 @@ const PollarisRepeat = (parent) => {
 
       this.initItemInstance(value, instance, index);
 
-      const eventTypes = ['click', 'submit', 'change'];
+      const eventTypes = [];
+      for (let property in this) {
+        const match = property.match(/^on(.*)/)
+        if (match) {
+          eventTypes.push(match[1]);
+        }
+      }
 
       eventTypes.forEach((eventType) => {
         const attr = `on-${eventType}`;
