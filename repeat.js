@@ -19,7 +19,7 @@ const PollarisRepeat = (parent) => {
         const attr = `on-${eventType}`;
 
         instance.querySelectorAll(`[${attr}]`).forEach((el) => {
-          el.addEventListener(eventType, this[el.getAttribute(attr)].bind(null, value, index));
+          this.on(el, eventType, this[el.getAttribute(attr)].bind(this, value, index));
         });
       });
 

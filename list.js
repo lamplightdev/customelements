@@ -38,15 +38,6 @@ class PollarisList extends BaseElement(HTMLElement, template) {
     };
   }
 
-  constructor() {
-    super();
-
-    this.update = this.update.bind(this);
-    this.clear = this.clear.bind(this);
-
-    this.removeFromList = this.removeFromList.bind(this);
-  }
-
   connectedCallback() {
     super.connectedCallback();
 

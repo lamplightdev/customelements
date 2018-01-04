@@ -7,6 +7,7 @@ import './store.js';
 import './page1.js';
 import './page2.js';
 import './page3.js';
+import './page4.js';
 
 
 const template = `
@@ -33,6 +34,8 @@ const template = `
 
 <pollaris-route defaultroute="page-1"></pollaris-route>
 
+<h3 id="user-status"></h3>
+
 <pollaris-nav></pollaris-nav>
 
 <div id="content">
@@ -43,6 +46,8 @@ const template = `
   <pollaris-page2 class="page" id="page-2"></pollaris-page2>
 
   <pollaris-page3 class="page" id="page-3"></pollaris-page3>
+
+  <pollaris-page4 class="page" id="page-4"></pollaris-page4>
 
   <slot></slot>
 </div>
@@ -60,6 +65,12 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         reflectToAttribute: true,
       },
 
+      user: {
+        type: Object,
+        value: null,
+        observer: 'observeUser',
+      },
+
       pages: {
         type: Array,
         value: [{
@@ -71,6 +82,9 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         }, {
           id: 'page-3',
           name: 'Page 3 (List)',
+        }, {
+          id: 'page-4',
+          name: 'Account',
         }],
         observer: 'observePages',
       },
@@ -105,12 +119,16 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   constructor() {
     super();
 
+    this.initAuth();
+
     this.onUpdateName = this.onUpdateName.bind(this);
     this.onUpdateItems = this.onUpdateItems.bind(this);
     this.onUpdatePage = this.onUpdatePage.bind(this);
     this.onUpdateRoute = this.onUpdateRoute.bind(this);
     this.onLoadStore = this.onLoadStore.bind(this);
     this.onUpdateList = this.onUpdateList.bind(this);
+    this.userSignIn = this.userSignIn.bind(this);
+    this.userSignOut = this.userSignOut.bind(this);
   }
 
   connectedCallback() {
@@ -122,9 +140,21 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.on(this, 'pollaris-updateroute', this.onUpdateRoute);
     this.on(this, 'pollaris-updatelist', this.onUpdateList);
     this.on(this, 'pollaris-loadstore', this.onLoadStore);
+    this.on(this, 'pollaris-usersignin', this.userSignIn);
+    this.on(this, 'pollaris-usersignout', this.userSignOut);
 
     this.$.querySelector('pollaris-route').update();
     this.loading = true;
+  }
+
+  initAuth() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.user = user;
+      } else {
+        this.user = null;
+      }
+    })
   }
 
   observeLoading(oldValue, value) {
@@ -162,6 +192,9 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         case 'page-3':
           this.initPage3();
           break;
+        case 'page-4':
+          this.initPage4();
+          break;
         default:
           break;
       }
@@ -186,9 +219,38 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     page3.set('list', this.list);
   }
 
+  initPage4() {
+    const page4 = this.$.querySelector('pollaris-page4');
+
+    page4.set('user', this.user);
+  }
+
+  userSignIn() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    firebase.auth().signInWithRedirect(provider);
+  }
+
+  userSignOut() {
+    firebase.auth().signOut().then(() => {
+      this.user = null;
+    });
+  }
+
   observePages(oldValue, value) {
     [...this.$.querySelectorAll('pollaris-nav')]
       .map(el => el.set('items', value));
+  }
+
+  observeUser(oldValue, value) {
+    this.initPage4();
+
+    const el = this.$.querySelector('#user-status');
+    if (value) {
+      el.textContent = `signed in as ${this.user.email}`;
+    } else {
+      el.textContent = 'signed out'
+    }
   }
 
   observeData(oldValue, value) {

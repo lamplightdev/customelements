@@ -41,12 +41,6 @@ class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
     };
   }
 
-  constructor() {
-    super();
-
-    this.navigate = this.navigate.bind(this);
-  }
-
   observeActive(oldValue, value) {
     if (oldValue) {
       this.$.querySelector(`a#${oldValue}`).classList.remove('active');

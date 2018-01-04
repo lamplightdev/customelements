@@ -26,12 +26,6 @@ class PollarisPage2 extends BaseElement(HTMLElement, template) {
     };
   }
 
-  constructor() {
-    super();
-
-    this.submitItemForm = this.submitItemForm.bind(this);
-  }
-
   observeItems(oldValue, value) {
     this.$.querySelector('pollaris-items').set('items', value);
   }

@@ -65,7 +65,7 @@ const BaseElement = (parent, template = false) => {
           const attr = `on-${eventType}`;
 
           this.$.querySelectorAll(`[${attr}]`).forEach((el) => {
-            el.addEventListener(eventType, this[el.getAttribute(attr)]);
+            this.on(el, eventType, this[el.getAttribute(attr)].bind(this));
           });
         });
       }
@@ -85,7 +85,7 @@ const BaseElement = (parent, template = false) => {
           const attr = `on-${eventType}`;
 
           this.$.querySelectorAll(`[${attr}]`).forEach((el) => {
-            el.removeEventListener(eventType, this[el.getAttribute(attr)]);
+            this.off(el, eventType, this[el.getAttribute(attr)]);
           });
         });
       }
@@ -137,15 +137,15 @@ const BaseElement = (parent, template = false) => {
 
         if (fromInitialisation) {
           // attributeChangedCallback isn't called on initialisation of an attribute
-          this.setProp(propName, this[propName], value);
+          this.setProp(propName, this[propName], value, true);
         }
       } else {
-        this.setProp(propName, this[propName], value);
+        this.setProp(propName, this[propName], value, fromInitialisation);
       }
     }
 
-    setProp(propName, oldValue, value) {
-      if (oldValue === value) return;
+    setProp(propName, oldValue, value, fromInitialisation = false) {
+      if (!fromInitialisation && oldValue === value) return;
 
       let adjustedNewValue = value;
 

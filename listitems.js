@@ -33,12 +33,6 @@ class PollarisListItems extends PollarisRepeat(BaseElement(HTMLElement, template
     };
   }
 
-  constructor() {
-    super();
-
-    this.remove = this.remove.bind(this);
-  }
-
   initItemInstance(item, instance, index) {
     const test = instance.querySelector('pollaris-listitem');
 

@@ -6,15 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./styles.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.1/webcomponents-lite.js"></script>
-    <script type="module" src="./script.js" defer></script>
   </head>
   <body>
     <h1>App</h1>
 
     <pollaris-app>
     </pollaris-app>
+
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-auth.js"></script>
+
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBjQ1snVo41KFaAMLTn4wOvjgPbUDGh8l8",
+        authDomain: "curlicue-41bbd.firebaseapp.com",
+        databaseURL: "https://curlicue-41bbd.firebaseio.com",
+        projectId: "curlicue-41bbd",
+        storageBucket: "",
+        messagingSenderId: "140159283620"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.1/webcomponents-lite.js"></script>
+
+    <script type="module" src="./script.js" defer></script>
 
     <script>
       const pollarisApp = document.querySelector('pollaris-app');
