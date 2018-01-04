@@ -148,13 +148,15 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
 
   initAuth() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.user = user;
-      } else {
-        this.user = null;
-      }
-    })
+    if (firebase) {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.user = user;
+        } else {
+          this.user = null;
+        }
+      });
+    }
   }
 
   observeLoading(oldValue, value) {
