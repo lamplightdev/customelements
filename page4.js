@@ -57,7 +57,7 @@ class PollarisPage4 extends BaseElement(HTMLElement, template) {
   }
 
   showUserDetails(user) {
-    this.$.querySelector('#user-email').textContent = user.email;
+    this.$id['user-email'].textContent = user.email;
   }
 
   signIn() {

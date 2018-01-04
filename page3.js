@@ -55,14 +55,14 @@ class PollarisPage3 extends BaseElement(HTMLElement, template) {
   }
 
   observeList(oldValue, value) {
-    const list = this.$.querySelector('#list');
+    const list = this.$id['list'];
 
     list.set('name', this.list.name);
     list.set('items', this.list.items);
   }
 
   observeHN(oldValue, value) {
-    const hn = this.$.querySelector('#hn');
+    const hn = this.$id['hn'];
 
     hn.set('items', this.hn.items.map((item) => {
       return {

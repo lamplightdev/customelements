@@ -26,17 +26,17 @@ class PollarisPage1 extends BaseElement(HTMLElement, template) {
   }
 
   observeName(oldValue, value) {
-    const counter = this.$.querySelector('#counter');
+    const counter = this.$id['counter'];
     if (counter) {
       counter.set('name', value);
     }
 
-    const input1 = this.$.querySelector('#input1');
+    const input1 = this.$id['input1'];
     if (input1) {
       input1.set('value', value);
     }
 
-    const input2 = this.$.querySelector('#input2');
+    const input2 = this.$id['input2'];
     if (input2) {
       input2.set('value', value);
     }

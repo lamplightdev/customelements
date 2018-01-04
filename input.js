@@ -24,7 +24,7 @@ class PollarisInput extends BaseElement(HTMLElement, template) {
   }
 
   observeValue(oldValue, newValue) {
-    this.$.querySelector('#input').value = newValue;
+    this.$id['input'].value = newValue;
   }
 
   onChange(event) {

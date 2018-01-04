@@ -22,7 +22,7 @@ class PollarisTest extends BaseElement(HTMLElement, template) {
   }
 
   observeContent(oldValue, value) {
-    this.$.querySelector('span').textContent = value;
+    this.$('span').textContent = value;
   }
 }
 

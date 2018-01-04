@@ -29,7 +29,7 @@ class PollarisCounter extends BaseElement(HTMLElement, template) {
   }
 
   observeName(oldValue, newValue) {
-    this.$.querySelector('#name').textContent = newValue;
+    this.$id['name'].textContent = newValue;
   }
 }
 

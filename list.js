@@ -45,11 +45,11 @@ class PollarisList extends BaseElement(HTMLElement, template) {
   }
 
   observeName(oldValue, value) {
-    this.$.querySelector('h2').textContent = value;
+    this.$('h2').textContent = value;
   }
 
   observeItems(oldValue, value) {
-    this.$.querySelector('pollaris-listitems').set('items', value);
+    this.$('pollaris-listitems').set('items', value);
   }
 
   update(event) {

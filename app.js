@@ -143,7 +143,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.on(this, 'pollaris-usersignin', this.userSignIn);
     this.on(this, 'pollaris-usersignout', this.userSignOut);
 
-    this.$.querySelector('pollaris-route').update();
+    this.$('pollaris-route').update();
     this.loading = true;
   }
 
@@ -159,27 +159,27 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
   observeLoading(oldValue, value) {
     if (value) {
-      this.$.querySelector('#content').classList.add('loading');
+      this.$id['content'].classList.add('loading');
     } else {
-      this.$.querySelector('#content').classList.remove('loading');
+      this.$id['content'].classList.remove('loading');
     }
   }
 
   observePage(oldValue, value) {
     if (oldValue) {
-      this.$.querySelector(`#${oldValue}`).classList.remove('active');
+      this.$(`#${oldValue}`).classList.remove('active');
     }
 
     if (value) {
-      const page = this.$.querySelector(`#${value}`);
+      const page = this.$(`#${value}`);
 
       page.classList.add('active');
 
-      [...this.$.querySelectorAll('pollaris-nav')]
+      [...this.$$('pollaris-nav')]
         .map(el => el.set('active', value));
 
-      this.$.querySelector('pollaris-route').set('route', value);
-      this.$.querySelector('#page-title').textContent
+      this.$('pollaris-route').set('route', value);
+      this.$id['page-title'].textContent
         = this.pages.find(page => page.id === value).name;
 
       switch (value) {
@@ -202,25 +202,25 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
 
   initPage1() {
-    const page1 = this.$.querySelector('pollaris-page1');
+    const page1 = this.$('pollaris-page1');
 
     page1.set('name', this.data.name);
   }
 
   initPage2() {
-    const page2 = this.$.querySelector('pollaris-page2');
+    const page2 = this.$('pollaris-page2');
 
     page2.set('items', this.data.items);
   }
 
   initPage3() {
-    const page3 = this.$.querySelector('pollaris-page3');
+    const page3 = this.$('pollaris-page3');
 
     page3.set('list', this.list);
   }
 
   initPage4() {
-    const page4 = this.$.querySelector('pollaris-page4');
+    const page4 = this.$('pollaris-page4');
 
     page4.set('user', this.user);
   }
@@ -238,14 +238,14 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   }
 
   observePages(oldValue, value) {
-    [...this.$.querySelectorAll('pollaris-nav')]
+    [...this.$$('pollaris-nav')]
       .map(el => el.set('items', value));
   }
 
   observeUser(oldValue, value) {
     this.initPage4();
 
-    const el = this.$.querySelector('#user-status');
+    const el = this.$id['user-status'];
     if (value) {
       el.textContent = `signed in as ${this.user.email}`;
     } else {
@@ -263,7 +263,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         break;
     }
 
-    this.$.querySelector('pollaris-store[name=data]').update(value);
+    this.$('pollaris-store[name=data]').update(value);
   }
 
   observeList(oldValue, value) {
@@ -271,7 +271,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
       this.initPage3();
     }
 
-    this.$.querySelector('pollaris-store[name=list]').update(value);
+    this.$('pollaris-store[name=list]').update(value);
   }
 
   onUpdateList(event) {

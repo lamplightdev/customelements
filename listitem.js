@@ -28,11 +28,11 @@ class PollarisListItem extends BaseElement(HTMLElement, template) {
   }
 
   observeDue(oldValue, value) {
-    this.$.querySelector('#due').textContent = new Date(value);
+    this.$id['due'].textContent = new Date(value);
   }
 
   observeContent(oldValue, value) {
-    this.$.querySelector('#content').textContent = value;
+    this.$id['content'].textContent = value;
   }
 }
 

@@ -35,8 +35,8 @@ const PollarisRepeat = (parent) => {
     }
 
     observeItems(oldValues, values) {
-      const template = this.$.querySelector('template');
-      const output = this.$.querySelector('.output');
+      const template = this.$('template');
+      const output = this.$('.output');
 
       values.forEach((value, index) => {
         if (!output.children[index]) {

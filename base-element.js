@@ -24,7 +24,14 @@ const BaseElement = (parent, template = false) => {
 
         this.shadowRoot.appendChild(instance);
 
-        this.$ = this.shadowRoot;
+        this.$s = this.shadowRoot;
+        this.$ = this.$s.querySelector.bind(this.$s);
+        this.$$ = this.$s.querySelectorAll.bind(this.$s);
+        this.$id = {};
+
+        this.$$('[id]').forEach((el) => {
+          this.$id[el.id] = el;
+        });
       }
 
       this._props = {};
@@ -64,7 +71,7 @@ const BaseElement = (parent, template = false) => {
         eventTypes.forEach((eventType) => {
           const attr = `on-${eventType}`;
 
-          this.$.querySelectorAll(`[${attr}]`).forEach((el) => {
+          this.$$(`[${attr}]`).forEach((el) => {
             this.on(el, eventType, this[el.getAttribute(attr)].bind(this));
           });
         });
@@ -84,7 +91,7 @@ const BaseElement = (parent, template = false) => {
         eventTypes.forEach((eventType) => {
           const attr = `on-${eventType}`;
 
-          this.$.querySelectorAll(`[${attr}]`).forEach((el) => {
+          this.$$(`[${attr}]`).forEach((el) => {
             this.off(el, eventType, this[el.getAttribute(attr)]);
           });
         });

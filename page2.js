@@ -27,7 +27,7 @@ class PollarisPage2 extends BaseElement(HTMLElement, template) {
   }
 
   observeItems(oldValue, value) {
-    this.$.querySelector('pollaris-items').set('items', value);
+    this.$('pollaris-items').set('items', value);
   }
 
   submitItemForm(event) {
