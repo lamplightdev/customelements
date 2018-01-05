@@ -173,7 +173,7 @@ const BaseElement = (parent, template = false) => {
       this._props[propName].value = adjustedNewValue;
 
       if (this[this._props[propName].observer]) {
-        this[this._props[propName].observer](oldValue, this[propName]);
+        this[this._props[propName].observer](oldValue, this[propName], fromInitialisation);
       }
     }
 

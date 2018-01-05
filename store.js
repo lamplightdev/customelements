@@ -41,7 +41,7 @@ class PollarisStore extends BaseElement(HTMLElement) {
   }
 
   update(store) {
-    console.log(store);
+    console.log(this.getAttribute('name'), store);
     localStorage.setItem(`pollaris-${this.getAttribute('name')}`, JSON.stringify(store));
 
     this.store = store;

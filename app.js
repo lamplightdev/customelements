@@ -255,7 +255,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     }
   }
 
-  observeData(oldValue, value) {
+  observeData(oldValue, value, fromInitialisation = false) {
     switch (this.page) {
       case 'page-1':
         this.initPage1();
@@ -265,15 +265,19 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         break;
     }
 
-    this.$('pollaris-store[name=data]').update(value);
+    if (!fromInitialisation) {
+      this.$('pollaris-store[name=data]').update(value);
+    }
   }
 
-  observeList(oldValue, value) {
+  observeList(oldValue, value, fromInitialisation = false) {
     if (this.page === 'page-3') {
       this.initPage3();
     }
 
-    this.$('pollaris-store[name=list]').update(value);
+    if (!fromInitialisation) {
+      this.$('pollaris-store[name=list]').update(value);
+    }
   }
 
   onUpdateList(event) {
