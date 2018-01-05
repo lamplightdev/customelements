@@ -42,8 +42,8 @@ class PollarisListItems extends PollarisRepeat(BaseElement(HTMLElement, template
 
   updateItemInstance(item, index) {
     const el = this.$$(`.output pollaris-listitem`)[index]
-    el.set('due', item.due);
-    el.set('content', item.content);
+    el.due = item.due;
+    el.content = item.content;
   }
 
   remove(item, index, event) {

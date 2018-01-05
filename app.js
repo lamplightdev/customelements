@@ -185,9 +185,9 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
       page.classList.add('active');
 
       [...this.$$('pollaris-nav')]
-        .map(el => el.set('active', value));
+        .map(el => el.active = value);
 
-      this.$('pollaris-route').set('route', value);
+      this.$('pollaris-route').route = value;
       this.$id['page-title'].textContent
         = this.pages.find(page => page.id === value).name;
 
@@ -213,25 +213,25 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
   initPage1() {
     const page1 = this.$('pollaris-page1');
 
-    page1.set('name', this.data.name);
+    page1.name = this.data.name;
   }
 
   initPage2() {
     const page2 = this.$('pollaris-page2');
 
-    page2.set('items', this.data.items);
+    page2.items = this.data.items;
   }
 
   initPage3() {
     const page3 = this.$('pollaris-page3');
 
-    page3.set('list', this.list);
+    page3.list = this.list;
   }
 
   initPage4() {
     const page4 = this.$('pollaris-page4');
 
-    page4.set('user', this.user);
+    page4.user = this.user;
   }
 
   userSignIn() {
@@ -248,7 +248,7 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
   observePages(oldValue, value) {
     [...this.$$('pollaris-nav')]
-      .map(el => el.set('items', value));
+      .map(el => el.items = value);
   }
 
   observeUser(oldValue, value) {

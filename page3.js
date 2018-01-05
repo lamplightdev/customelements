@@ -57,14 +57,14 @@ class PollarisPage3 extends BaseElement(HTMLElement, template) {
   observeList(oldValue, value) {
     const list = this.$id['list'];
 
-    list.set('name', this.list.name);
-    list.set('items', this.list.items);
+    list.name = this.list.name;
+    list.items = this.list.items;
   }
 
   observeHN(oldValue, value) {
     const hn = this.$id['hn'];
 
-    hn.set('items', this.hn.items.map((item) => {
+    hn.items = this.hn.items.map((item => {
       return {
         content: item.title,
         due: item.url,

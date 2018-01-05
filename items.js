@@ -37,7 +37,7 @@ class PollarisItems extends PollarisRepeat(BaseElement(HTMLElement, template)) {
   }
 
   updateItemInstance(item, index) {
-    this.$(`.output pollaris-test:nth-child(${index + 1})`).set('content', item);
+    this.$(`.output pollaris-test:nth-child(${index + 1})`).content = item;
   }
 }
 

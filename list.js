@@ -49,7 +49,7 @@ class PollarisList extends BaseElement(HTMLElement, template) {
   }
 
   observeItems(oldValue, value) {
-    this.$('pollaris-listitems').set('items', value);
+    this.$('pollaris-listitems').items = value;
   }
 
   update(event) {
