@@ -71,6 +71,12 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
         observer: 'observeUser',
       },
 
+      db: {
+        type: Object,
+        value: null,
+        observer: 'observeDb',
+      },
+
       pages: {
         type: Array,
         value: [{
@@ -120,14 +126,16 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     super();
 
     this.initAuth();
+    this.initDb();
 
     this.onUpdateName = this.onUpdateName.bind(this);
     this.onUpdateItems = this.onUpdateItems.bind(this);
     this.onUpdatePage = this.onUpdatePage.bind(this);
     this.onUpdateRoute = this.onUpdateRoute.bind(this);
     this.onUpdateList = this.onUpdateList.bind(this);
-    this.userSignIn = this.userSignIn.bind(this);
-    this.userSignOut = this.userSignOut.bind(this);
+    this.onUserSignIn = this.onUserSignIn.bind(this);
+    this.onUserSignOut = this.onUserSignOut.bind(this);
+    this.onStoreUpdate = this.onStoreUpdate.bind(this);
   }
 
   async connectedCallback() {
@@ -138,18 +146,24 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.on(this, 'pollaris-updatepage', this.onUpdatePage);
     this.on(this, 'pollaris-updateroute', this.onUpdateRoute);
     this.on(this, 'pollaris-updatelist', this.onUpdateList);
-    this.on(this, 'pollaris-usersignin', this.userSignIn);
-    this.on(this, 'pollaris-usersignout', this.userSignOut);
+    this.on(this, 'pollaris-usersignin', this.onUserSignIn);
+    this.on(this, 'pollaris-usersignout', this.onUserSignOut);
+    this.on(this, 'pollaris-storeupdate', this.onStoreUpdate);
 
     this.$('pollaris-route').update();
 
     this.loading = true;
 
+    await this.$id['store-data'].listen();
+    await this.$id['store-list'].listen();
+
+    /*
     const data = await this.$id['store-data'].retrieve();
     const list = await this.$id['store-list'].retrieve();
 
     if (data !== null) this.data = data;
     if (list !== null) this.list = list;
+    */
 
     this.loading = false;
   }
@@ -163,6 +177,12 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
           this.user = null;
         }
       });
+    }
+  }
+
+  initDb() {
+    if (firebase) {
+      this.db = firebase.firestore();
     }
   }
 
@@ -234,18 +254,6 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     page4.user = this.user;
   }
 
-  userSignIn() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    firebase.auth().signInWithRedirect(provider);
-  }
-
-  userSignOut() {
-    firebase.auth().signOut().then(() => {
-      this.user = null;
-    });
-  }
-
   observePages(oldValue, value) {
     [...this.$$('pollaris-nav')]
       .map(el => el.items = value);
@@ -260,6 +268,10 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     } else {
       el.textContent = 'signed out'
     }
+  }
+
+  observeDb(oldValue, value) {
+    this.$$('pollaris-store').forEach(store => store.db = value);
   }
 
   observeData(oldValue, value, fromInitialisation = false) {
@@ -284,6 +296,35 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
     if (!fromInitialisation) {
       this.$('pollaris-store[name=list]').update(value);
+    }
+  }
+
+  onUserSignIn() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    firebase.auth().signInWithRedirect(provider);
+  }
+
+  onUserSignOut() {
+    firebase.auth().signOut().then(() => {
+      this.user = null;
+    });
+  }
+
+  onStoreUpdate(event) {
+    if (event.detail.data) {
+      const { name, data } = event.detail;
+
+      switch (name) {
+        case 'list':
+          this.list = data;
+          break;
+        case 'data':
+          this.data = data;
+          break;
+        default:
+          break;
+      };
     }
   }
 
