@@ -6,7 +6,7 @@ class PollarisStore extends BaseElement(HTMLElement) {
       store: {
         type: Object,
         value: {},
-        observer: 'observeStore'
+        observer: 'observeStore',
       },
     };
   }
@@ -19,32 +19,22 @@ class PollarisStore extends BaseElement(HTMLElement) {
       store = JSON.parse(store);
 
       this.store = store;
-
-      setTimeout(() => {
-        this.fire('pollaris-loadstore', {
-          name: this.getAttribute('name'),
-          store,
-        });
-      });
-    } else {
-      setTimeout(() => {
-        this.fire('pollaris-loadstore');
-      });
     }
   }
 
   observeStore(oldValue, value) {
-    this.fire('pollaris-updatestore', {
-      name: this.getAttribute('name'),
-      store: this.store,
-    });
+  }
+
+  retrieve() {
+    return Promise.resolve().then(() => this.store);
   }
 
   update(store) {
-    console.log(this.getAttribute('name'), store);
-    localStorage.setItem(`pollaris-${this.getAttribute('name')}`, JSON.stringify(store));
+    return Promise.resolve().then(() => {
+      localStorage.setItem(`pollaris-${this.getAttribute('name')}`, JSON.stringify(store));
 
-    this.store = store;
+      this.store = store;
+    });
   }
 }
 

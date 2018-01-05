@@ -29,8 +29,8 @@ const template = `
   }
 </style>
 
-<pollaris-store name="data"></pollaris-store>
-<pollaris-store name="list"></pollaris-store>
+<pollaris-store id="store-data" name="data"></pollaris-store>
+<pollaris-store id="store-list" name="list"></pollaris-store>
 
 <pollaris-route defaultroute="page-1"></pollaris-route>
 
@@ -125,13 +125,12 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.onUpdateItems = this.onUpdateItems.bind(this);
     this.onUpdatePage = this.onUpdatePage.bind(this);
     this.onUpdateRoute = this.onUpdateRoute.bind(this);
-    this.onLoadStore = this.onLoadStore.bind(this);
     this.onUpdateList = this.onUpdateList.bind(this);
     this.userSignIn = this.userSignIn.bind(this);
     this.userSignOut = this.userSignOut.bind(this);
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
 
     this.on(this, 'pollaris-updatename', this.onUpdateName);
@@ -139,12 +138,17 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
     this.on(this, 'pollaris-updatepage', this.onUpdatePage);
     this.on(this, 'pollaris-updateroute', this.onUpdateRoute);
     this.on(this, 'pollaris-updatelist', this.onUpdateList);
-    this.on(this, 'pollaris-loadstore', this.onLoadStore);
     this.on(this, 'pollaris-usersignin', this.userSignIn);
     this.on(this, 'pollaris-usersignout', this.userSignOut);
 
     this.$('pollaris-route').update();
+
     this.loading = true;
+
+    this.data = await this.$id['store-data'].retrieve();
+    this.list = await this.$id['store-list'].retrieve();
+
+    this.loading = false;
   }
 
   initAuth() {
@@ -307,18 +311,6 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
   onUpdateRoute(event) {
     this.page = event.detail.route;
-  }
-
-  onLoadStore(event) {
-    if (event.detail) {
-      if (event.detail.name === 'data') {
-        this.data = event.detail.store;
-      } else if (event.detail.name === 'list') {
-        this.list = event.detail.store;
-      }
-    }
-
-    this.loading = false;
   }
 }
 
