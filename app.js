@@ -145,8 +145,11 @@ class PollarisApp extends BaseElement(HTMLElement, template) {
 
     this.loading = true;
 
-    this.data = await this.$id['store-data'].retrieve();
-    this.list = await this.$id['store-list'].retrieve();
+    const data = await this.$id['store-data'].retrieve();
+    const list = await this.$id['store-list'].retrieve();
+
+    if (data !== null) this.data = data;
+    if (list !== null) this.list = list;
 
     this.loading = false;
   }

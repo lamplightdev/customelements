@@ -5,7 +5,7 @@ class PollarisStore extends BaseElement(HTMLElement) {
     return {
       store: {
         type: Object,
-        value: {},
+        value: null,
         observer: 'observeStore',
       },
     };
