@@ -11,16 +11,14 @@ const BaseElement = (parent, template = false) => {
         this.attachShadow({mode: 'open'});
         let instance;
 
-        if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-          const htmlTemplate = this._makeTemplate`${template}`;
+        const htmlTemplate = this._makeTemplate`${template}`;
 
+        if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
           window.ShadyCSS.prepareTemplate(htmlTemplate, this.nodeName.toLowerCase());
           window.ShadyCSS.styleElement(this);
-
-          instance = htmlTemplate.content.cloneNode(true);
-        } else {
-          instance = document.createRange().createContextualFragment(template);
         }
+
+        instance = htmlTemplate.content.cloneNode(true);
 
         this.shadowRoot.appendChild(instance);
 
@@ -144,6 +142,7 @@ const BaseElement = (parent, template = false) => {
 
         if (fromInitialisation) {
           // attributeChangedCallback isn't called on initialisation of an attribute
+          // so ensure it's set here
           this.setProp(propName, this[propName], value, true);
         }
       } else {
