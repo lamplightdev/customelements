@@ -67,7 +67,7 @@ class PollarisPage3 extends BaseElement(HTMLElement, template) {
     hn.set('items', this.hn.items.map((item) => {
       return {
         content: item.title,
-        due: item.time,
+        due: item.url,
       };
     }));
   }

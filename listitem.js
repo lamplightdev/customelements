@@ -14,7 +14,7 @@ class PollarisListItem extends BaseElement(HTMLElement, template) {
   static get props() {
     return {
       due: {
-        type: Number,
+        type: String,
         value: '',
         observer: 'observeDue',
       },
@@ -28,7 +28,7 @@ class PollarisListItem extends BaseElement(HTMLElement, template) {
   }
 
   observeDue(oldValue, value) {
-    this.$id['due'].textContent = new Date(value);
+    this.$id['due'].textContent = value;
   }
 
   observeContent(oldValue, value) {
