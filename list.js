@@ -1,5 +1,6 @@
 import FullMixin from './full-mixin.js';
 import './listitems.js';
+import iconAndroid from './icons/android.js';
 
 const template = `
 <style>
@@ -10,7 +11,9 @@ const template = `
 
 <h2></h2>
 
-<button id="update" on-click="update">Update</button>
+<button id="update" on-click="update">
+  ${iconAndroid}
+</button>
 <button id="clear" on-click="clear">Clear</button>
 
 <pollaris-listitems></pollaris-listitems>

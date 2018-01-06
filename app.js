@@ -36,11 +36,8 @@ const template = `
   <h2 id="page-title"></h2>
 
   <pollaris-page1 class="page" id="page-1"></pollaris-page1>
-
   <pollaris-page2 class="page" id="page-2"></pollaris-page2>
-
   <pollaris-page3 class="page" id="page-3"></pollaris-page3>
-
   <pollaris-page4 class="page" id="page-4"></pollaris-page4>
 
   <slot></slot>

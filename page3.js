@@ -9,6 +9,7 @@ const template = `
 </style>
 
 <pollaris-list id="list"></pollaris-list>
+<h3 id="rate"></h3>
 <pollaris-list id="hn" eventname="updatehn"></pollaris-list>
 `;
 
@@ -22,6 +23,11 @@ class PollarisPage3 extends FullMixin(HTMLElement, template) {
           items: [],
         },
         observer: 'observeList',
+      },
+
+      rate: {
+        type: Number,
+        value: 0,
       },
 
       hn: {
@@ -59,6 +65,13 @@ class PollarisPage3 extends FullMixin(HTMLElement, template) {
 
     list.name = this.list.name;
     list.items = this.list.items;
+
+    let rate = 0;
+    if (list.items.length > 1) {
+      rate = list.items.length / ((list.items[list.items.length - 1].due - list.items[0].due) / 1000);
+    }
+
+    this.$id.rate.textContent = `${rate}/s`;
   }
 
   observeHN(oldValue, value) {
