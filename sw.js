@@ -36,7 +36,7 @@ const fileManifest = [
   },
   {
     "url": "index.html",
-    "revision": "f1167d3ed56779223c02bdaa1abea0e9"
+    "revision": "c8ec9d915be90848cdf7fc852ffa6f30"
   },
   {
     "url": "input.js",
@@ -57,6 +57,10 @@ const fileManifest = [
   {
     "url": "listitems.js",
     "revision": "7cf0b4e3b947a5c2b9fa3c334b557a87"
+  },
+  {
+    "url": "manifest.json",
+    "revision": "ecca366485c1462de38acaf700e14e97"
   },
   {
     "url": "nav.js",
@@ -101,10 +105,6 @@ const fileManifest = [
   {
     "url": "shadow-mixin.js",
     "revision": "ba6436ed51d3f128656374900d6aa295"
-  },
-  {
-    "url": "store.js",
-    "revision": "f61c815121bdbcf73abdf44d37521094"
   },
   {
     "url": "styles.css",
