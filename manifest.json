@@ -1,0 +1,9 @@
+{
+  "name": "CustomElements",
+  "short_name": "CustomElements",
+  "description": "CustomElements",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#508ea5",
+  "background_color": "#d0d0d0"
+}

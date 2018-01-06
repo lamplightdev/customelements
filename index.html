@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <title>Hello!</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <meta name="description" content="Custom Elements">
+    <meta name="theme-color" content="#508ea5">
+
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
@@ -49,7 +53,6 @@
           */
         });
 
-      /*
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js').catch((error) => {
@@ -61,7 +64,6 @@
       } else {
         console.log('warn', 'Your browser does not support service workers.');
       }
-      */
     </script>
 
   </body>
