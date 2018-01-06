@@ -127,15 +127,6 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
 
     this.initAuth();
     this.initDb();
-
-    this.onUpdateName = this.onUpdateName.bind(this);
-    this.onUpdateItems = this.onUpdateItems.bind(this);
-    this.onUpdatePage = this.onUpdatePage.bind(this);
-    this.onUpdateRoute = this.onUpdateRoute.bind(this);
-    this.onUpdateList = this.onUpdateList.bind(this);
-    this.onUserSignIn = this.onUserSignIn.bind(this);
-    this.onUserSignOut = this.onUserSignOut.bind(this);
-    this.onStoreUpdate = this.onStoreUpdate.bind(this);
   }
 
   async connectedCallback() {
