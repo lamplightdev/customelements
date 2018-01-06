@@ -20,7 +20,7 @@ importScripts('workbox-sw.prod.v2.1.2.js');
 const fileManifest = [
   {
     "url": "app.js",
-    "revision": "22b61d5fb64d0382452115848d13b774"
+    "revision": "15b01bbda478124968269cd48ad1eeaa"
   },
   {
     "url": "counter.js",
@@ -28,15 +28,19 @@ const fileManifest = [
   },
   {
     "url": "full-mixin.js",
-    "revision": "761556ba39ef6348dd701c511ae150ff"
+    "revision": "fb6c8b80d82dc17be76e856519524a73"
   },
   {
     "url": "helper-mixin.js",
     "revision": "a49d1ab6250b54832e73adb34d60883f"
   },
   {
+    "url": "icons/android.js",
+    "revision": "9cbb061c9ff675a61a7e396a5ee3ecf2"
+  },
+  {
     "url": "index.html",
-    "revision": "c8ec9d915be90848cdf7fc852ffa6f30"
+    "revision": "5934515f33fcec89480a49f8fc2764d9"
   },
   {
     "url": "input.js",
@@ -48,7 +52,7 @@ const fileManifest = [
   },
   {
     "url": "list.js",
-    "revision": "abd27ee79d3de8b4d91dc475a18b6b8a"
+    "revision": "ce10b35e190db97680220533846d3414"
   },
   {
     "url": "listitem.js",
@@ -76,11 +80,11 @@ const fileManifest = [
   },
   {
     "url": "page3.js",
-    "revision": "7ad7efac7a1b7e646a255fced6701264"
+    "revision": "a5acf52a063b577b4f935e4e8e3d81d6"
   },
   {
     "url": "page4.js",
-    "revision": "0f5750f2bb058718b7c58d0200569245"
+    "revision": "2c0b13054578b2fcc8a90f899bbe9cc9"
   },
   {
     "url": "property-mixin.js",
@@ -104,15 +108,19 @@ const fileManifest = [
   },
   {
     "url": "shadow-mixin.js",
-    "revision": "ba6436ed51d3f128656374900d6aa295"
+    "revision": "af797d3607fa14669eb043bbe371a9a7"
   },
   {
     "url": "store.js",
     "revision": "f61c815121bdbcf73abdf44d37521094"
   },
   {
+    "url": "styles.js",
+    "revision": "b0d0746e380ecb3601e142e15fec04db"
+  },
+  {
     "url": "test.js",
-    "revision": "33b19b405a4a7893d6acf92d12e64292"
+    "revision": "4d5f14dbddbcb016fb4bbe1bfe25038e"
   },
   {
     "url": "testing-app.js",
