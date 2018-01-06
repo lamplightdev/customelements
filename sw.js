@@ -20,59 +20,67 @@ importScripts('workbox-sw.prod.v2.1.2.js');
 const fileManifest = [
   {
     "url": "app.js",
-    "revision": "0a5aa858d5bf3a12d3d869edf7d9c0e1"
-  },
-  {
-    "url": "full-mixin.js",
-    "revision": "eca9953aaecd10a19aa19ea14d43ee72"
+    "revision": "22b61d5fb64d0382452115848d13b774"
   },
   {
     "url": "counter.js",
-    "revision": "c6d339a3c7c08421a46d9959343dcdbb"
+    "revision": "9cda1d98e381438717bbf528198810cb"
+  },
+  {
+    "url": "full-mixin.js",
+    "revision": "761556ba39ef6348dd701c511ae150ff"
+  },
+  {
+    "url": "helper-mixin.js",
+    "revision": "a49d1ab6250b54832e73adb34d60883f"
   },
   {
     "url": "index.html",
-    "revision": "22a2ad5012e1768eb41d958bfc3b6a75"
+    "revision": "f1167d3ed56779223c02bdaa1abea0e9"
   },
   {
     "url": "input.js",
-    "revision": "93435f5e4e9938f822e593cc79903d39"
+    "revision": "eacff32130b172cfe351052f13d5ef14"
   },
   {
     "url": "items.js",
-    "revision": "e42b0c50b8d912930752dcdf014dd777"
+    "revision": "bde3e1abccc604e52899f61f76015339"
   },
   {
     "url": "list.js",
-    "revision": "319b70880d3ca245e6a81ec9d3a1bf87"
+    "revision": "abd27ee79d3de8b4d91dc475a18b6b8a"
   },
   {
     "url": "listitem.js",
-    "revision": "3ee4f462de34198afbfe6e8a87586c63"
+    "revision": "0d8112b0f28adfcd9221d3053462968e"
   },
   {
     "url": "listitems.js",
-    "revision": "a282a4ef9be5d3f8b0f7264e77c06c00"
+    "revision": "7cf0b4e3b947a5c2b9fa3c334b557a87"
   },
   {
     "url": "nav.js",
-    "revision": "abae129348437887a3cc2f4e01f3f45e"
+    "revision": "a4f53de3dcad787543b113085a1c7214"
   },
   {
     "url": "page1.js",
-    "revision": "9ad5f0e4555f997373e23d582699eaac"
+    "revision": "a1ff56975281962e1e20a2cc04715a2e"
   },
   {
     "url": "page2.js",
-    "revision": "c6cc5639940dccb1b859eea3bdd9b192"
+    "revision": "0a5e89851f46ca6231f7942dc485de24"
   },
   {
     "url": "page3.js",
-    "revision": "911f44517c4862a8f9c0ff5825e8cd8e"
+    "revision": "7ad7efac7a1b7e646a255fced6701264"
   },
   {
     "url": "page4.js",
-    "revision": "6cc5b18d298a1753534bd7424c389ff8"
+    "revision": "0f5750f2bb058718b7c58d0200569245"
+  },
+  {
+    "url": "property-mixin.js",
+    "revision": "6fa1333fcf8e5c2971a235a0318c99e7"
   },
   {
     "url": "README.md",
@@ -84,15 +92,19 @@ const fileManifest = [
   },
   {
     "url": "route.js",
-    "revision": "56262c836b766e6c3b6f10f3808d8961"
+    "revision": "e38c0f700204a3bf0177967ba195eef2"
   },
   {
     "url": "script.js",
     "revision": "3e99a8558116a9a32c05ae3c3e2566e1"
   },
   {
+    "url": "shadow-mixin.js",
+    "revision": "ba6436ed51d3f128656374900d6aa295"
+  },
+  {
     "url": "store.js",
-    "revision": "6839495ff5707b4374566cd32af8d6d5"
+    "revision": "f61c815121bdbcf73abdf44d37521094"
   },
   {
     "url": "styles.css",
@@ -100,11 +112,11 @@ const fileManifest = [
   },
   {
     "url": "test.js",
-    "revision": "5e6a1890698639c112b9f2b1ccb3f9fd"
+    "revision": "33b19b405a4a7893d6acf92d12e64292"
   },
   {
     "url": "testing-app.js",
-    "revision": "a02e15dd3b8125af3f6a9637ce2f0c01"
+    "revision": "8734932824e54ad412a20763f7d7f0fb"
   },
   {
     "url": "testing.html",
