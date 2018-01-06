@@ -107,8 +107,8 @@ const fileManifest = [
     "revision": "ba6436ed51d3f128656374900d6aa295"
   },
   {
-    "url": "styles.css",
-    "revision": "d41d8cd98f00b204e9800998ecf8427e"
+    "url": "store.js",
+    "revision": "f61c815121bdbcf73abdf44d37521094"
   },
   {
     "url": "test.js",
