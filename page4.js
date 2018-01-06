@@ -25,7 +25,7 @@ const template = `
 </div>
 
 <div id="signed-out">
-  <button id="signin" on-click="signIn">Sign in with Google</button>
+  <button id="signin" on-click="googleSignIn">Sign in with Google</button>
 </div>
 `;
 
@@ -60,9 +60,18 @@ class PollarisPage4 extends FullMixin(HTMLElement, template) {
     this.$id['user-email'].textContent = user.email;
   }
 
-  signIn() {
-    this.fire('pollaris-usersignin');
+  googleSignIn() {
+    this.fire('pollaris-usersignin', {
+      provider: 'google',
+    });
   }
+
+  twitterSignIn() {
+    this.fire('pollaris-usersignin', {
+      provider: 'twitter',
+    });
+  }
+
 
   signOut() {
     this.fire('pollaris-usersignout');

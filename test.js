@@ -3,7 +3,7 @@ import FullMixin from './full-mixin.js';
 const template = `
 <style>
   :host {
-    display: block;
+    display: inline-block;
   }
 </style>
 

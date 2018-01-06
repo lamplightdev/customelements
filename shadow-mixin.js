@@ -1,13 +1,24 @@
-const ShadowMixin = (parentElement, template = false) => {
+const ShadowMixin = (parentElement, template = false, additionalStyles = false) => {
   return class extends parentElement {
     constructor() {
       super();
 
       if (template) {
+        let modifiedTemplate = template;
+
+        if (additionalStyles) {
+          modifiedTemplate = `
+            ${template}
+            <style>
+            ${additionalStyles}
+            </style>
+          `;
+        }
+
         this.attachShadow({mode: 'open'});
         let instance;
 
-        const htmlTemplate = this._makeTemplate`${template}`;
+        const htmlTemplate = this._makeTemplate`${modifiedTemplate}`;
 
         if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
           window.ShadyCSS.prepareTemplate(htmlTemplate, this.nodeName.toLowerCase());

@@ -302,10 +302,24 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
     }
   }
 
-  onUserSignIn() {
-    const provider = new firebase.auth.GoogleAuthProvider();
+  onUserSignIn(event) {
+    let provider;
 
-    firebase.auth().signInWithRedirect(provider);
+    switch (event.detail.provider) {
+      case 'google': {}
+        provider = new firebase.auth.GoogleAuthProvider();
+        break;
+      case 'twitter':
+        provider = new firebase.auth.TwitterAuthProvider();
+        break;
+      default:
+        break;
+    }
+
+    if (provider) {
+      firebase.auth().signInWithRedirect(provider);
+    }
+
   }
 
   onUserSignOut() {
