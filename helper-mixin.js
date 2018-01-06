@@ -1,5 +1,11 @@
 const HelperMixin = (parentElement) => {
   return class extends parentElement {
+    constructor() {
+      super();
+
+      this._loadedScripts = {};
+    }
+
     connectedCallback() {
       super.connectedCallback();
 
@@ -58,6 +64,27 @@ const HelperMixin = (parentElement) => {
         composed,
         detail,
       }));
+    }
+
+    loadScript(src) {
+      if (this._loadedScripts[src]) {
+        return Promise.resolve();
+      }
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const script = document.createElement('script');
+          script.setAttribute('type', 'module');
+
+          script.onload = () => {
+            this._loadedScripts[src] = true;
+            resolve();
+          };
+          script.src = src;
+
+          document.head.appendChild(script);
+        });
+      });
     }
   }
 };

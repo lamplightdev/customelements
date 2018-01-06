@@ -4,12 +4,6 @@ import './route.js';
 import './nav.js';
 import './store.js';
 
-import './page1.js';
-import './page2.js';
-import './page3.js';
-import './page4.js';
-
-
 const template = `
 <style>
   :host {
@@ -145,16 +139,14 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
 
     this.loading = true;
 
-    await this.$id['store-data'].listen();
-    await this.$id['store-list'].listen();
+    this.$id['store-data'].listen();
+    this.$id['store-list'].listen();
 
-    /*
     const data = await this.$id['store-data'].retrieve();
     const list = await this.$id['store-list'].retrieve();
 
     if (data !== null) this.data = data;
     if (list !== null) this.list = list;
-    */
 
     this.loading = false;
   }
@@ -222,27 +214,47 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
   }
 
   initPage1() {
-    const page1 = this.$('pollaris-page1');
+    if (this.page !== 'page-1') return;
 
-    page1.name = this.data.name;
+    this.loadScript('./page1.js')
+      .then(() => {
+        const page1 = this.$('pollaris-page1');
+
+        page1.name = this.data.name;
+      });
   }
 
   initPage2() {
-    const page2 = this.$('pollaris-page2');
+    if (this.page !== 'page-2') return;
 
-    page2.items = this.data.items;
+    this.loadScript('./page2.js')
+      .then(() => {
+        const page2 = this.$('pollaris-page2');
+
+        page2.items = this.data.items;
+      });
   }
 
   initPage3() {
-    const page3 = this.$('pollaris-page3');
+    if (this.page !== 'page-3') return;
 
-    page3.list = this.list;
+    this.loadScript('./page3.js')
+      .then(() => {
+        const page3 = this.$('pollaris-page3');
+
+        page3.list = this.list;
+      });
   }
 
   initPage4() {
-    const page4 = this.$('pollaris-page4');
+    if (this.page !== 'page-4') return;
 
-    page4.user = this.user;
+    this.loadScript('./page4.js')
+      .then(() => {
+        const page4 = this.$('pollaris-page4');
+
+        page4.user = this.user;
+      });
   }
 
   observePages(oldValue, value) {
