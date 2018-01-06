@@ -1,4 +1,4 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 
 import './route.js';
 import './nav.js';
@@ -55,7 +55,7 @@ const template = `
 <pollaris-nav></pollaris-nav>
 `;
 
-class PollarisApp extends BaseElement(HTMLElement, template) {
+class PollarisApp extends FullMixin(HTMLElement, template) {
   static get props() {
     return {
       page: {

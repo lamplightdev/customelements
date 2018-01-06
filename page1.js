@@ -1,4 +1,4 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 import './counter.js';
 import './input.js';
 
@@ -14,7 +14,7 @@ const template = `
 <pollaris-input id="input2"></pollaris-input>
 `;
 
-class PollarisPage1 extends BaseElement(HTMLElement, template) {
+class PollarisPage1 extends FullMixin(HTMLElement, template) {
   static get props() {
     return {
       name: {

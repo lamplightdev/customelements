@@ -1,4 +1,4 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 import PollarisRepeat from './repeat.js';
 
 const template = `
@@ -24,7 +24,7 @@ const template = `
 <div class="output"></div>
 `;
 
-class PollarisNav extends PollarisRepeat(BaseElement(HTMLElement, template)) {
+class PollarisNav extends PollarisRepeat(FullMixin(HTMLElement, template)) {
   static get props() {
     return {
       active: {

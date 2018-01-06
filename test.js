@@ -1,4 +1,4 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 
 const template = `
 <style>
@@ -10,7 +10,7 @@ const template = `
 <span></span>
 `;
 
-class PollarisTest extends BaseElement(HTMLElement, template) {
+class PollarisTest extends FullMixin(HTMLElement, template) {
   static get props() {
     return {
       content: {

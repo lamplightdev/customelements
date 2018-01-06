@@ -1,36 +1,11 @@
-const BaseElement = (parent, template = false) => {
-  return class extends parent {
+const PropertyMixin = (parentElement, template = false) => {
+  return class extends parentElement {
     static get observedAttributes() {
       return this.props ? Object.keys(this.props) : [];
     }
 
     constructor() {
       super();
-
-      if (template) {
-        this.attachShadow({mode: 'open'});
-        let instance;
-
-        const htmlTemplate = this._makeTemplate`${template}`;
-
-        if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-          window.ShadyCSS.prepareTemplate(htmlTemplate, this.nodeName.toLowerCase());
-          window.ShadyCSS.styleElement(this);
-        }
-
-        instance = htmlTemplate.content.cloneNode(true);
-
-        this.shadowRoot.appendChild(instance);
-
-        this.$s = this.shadowRoot;
-        this.$ = this.$s.querySelector.bind(this.$s);
-        this.$$ = this.$s.querySelectorAll.bind(this.$s);
-        this.$id = {};
-
-        this.$$('[id]').forEach((el) => {
-          this.$id[el.id] = el;
-        });
-      }
 
       this._props = {};
 
@@ -54,58 +29,6 @@ const BaseElement = (parent, template = false) => {
           this.set(propName, value, !this.hasAttribute(propName), true);
         });
       }
-    }
-
-    connectedCallback() {
-      if (this.$) {
-        const eventTypes = [];
-        for (let property in this) {
-          const match = property.match(/^on(.*)/)
-          if (match) {
-            eventTypes.push(match[1]);
-          }
-        }
-
-        eventTypes.forEach((eventType) => {
-          const attr = `on-${eventType}`;
-
-          this.$$(`[${attr}]`).forEach((el) => {
-            this.on(el, eventType, this[el.getAttribute(attr)].bind(this));
-          });
-        });
-      }
-    }
-
-    disconnectedCallback() {
-      if (this.$) {
-        const eventTypes = [];
-        for (let property in this) {
-          const match = property.match(/^on(.*)/)
-          if (match) {
-            eventTypes.push(match[1]);
-          }
-        }
-
-        eventTypes.forEach((eventType) => {
-          const attr = `on-${eventType}`;
-
-          this.$$(`[${attr}]`).forEach((el) => {
-            this.off(el, eventType, this[el.getAttribute(attr)]);
-          });
-        });
-      }
-    }
-
-    _makeTemplate (strings, ...substs) {
-      let html = '';
-      for (let i = 0; i < substs.length; i++) {
-          html += strings[i];
-          html += substs[i];
-      }
-      html += strings[strings.length - 1];
-      const template = document.createElement('template');
-      template.innerHTML = html;
-      return template;
     }
 
     set(propName, value, allowReflection = true, fromInitialisation = false) {
@@ -199,23 +122,7 @@ const BaseElement = (parent, template = false) => {
           break;
       }
     }
-
-    on(el, type, func) {
-      el.addEventListener(type, func);
-    }
-
-    off(el, type, func) {
-      el.removeEventListener(type, func);
-    }
-
-    fire(type, detail, bubbles = true, composed = true) {
-      this.dispatchEvent(new CustomEvent(type, {
-        bubbles,
-        composed,
-        detail,
-      }));
-    }
   }
-}
+};
 
-export default BaseElement;
+export default PropertyMixin;

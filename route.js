@@ -1,6 +1,6 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 
-class PollarisRoute extends BaseElement(HTMLElement) {
+class PollarisRoute extends FullMixin(HTMLElement) {
   static get props() {
     return {
       route: {

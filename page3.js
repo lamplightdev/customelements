@@ -1,4 +1,4 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 import './list.js';
 
 const template = `
@@ -12,7 +12,7 @@ const template = `
 <pollaris-list id="hn" eventname="updatehn"></pollaris-list>
 `;
 
-class PollarisPage3 extends BaseElement(HTMLElement, template) {
+class PollarisPage3 extends FullMixin(HTMLElement, template) {
   static get props() {
     return {
       list: {

@@ -1,4 +1,4 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 
 const template = `
 <style>
@@ -17,7 +17,7 @@ const template = `
 <slot name="me"></slot>
 `;
 
-class PollarisCounter extends BaseElement(HTMLElement, template) {
+class PollarisCounter extends FullMixin(HTMLElement, template) {
   static get props() {
     return {
       name: {

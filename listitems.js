@@ -1,6 +1,6 @@
 
 
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 import PollarisRepeat from './repeat.js';
 
 import './listitem.js';
@@ -22,7 +22,7 @@ const template = `
 <div class="output"></div>
 `;
 
-class PollarisListItems extends PollarisRepeat(BaseElement(HTMLElement, template)) {
+class PollarisListItems extends PollarisRepeat(FullMixin(HTMLElement, template)) {
   static get props() {
     return {
       items: {

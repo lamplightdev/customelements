@@ -23,7 +23,7 @@ const fileManifest = [
     "revision": "0a5aa858d5bf3a12d3d869edf7d9c0e1"
   },
   {
-    "url": "base-element.js",
+    "url": "full-mixin.js",
     "revision": "eca9953aaecd10a19aa19ea14d43ee72"
   },
   {

@@ -1,6 +1,6 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 
-class PollarisStore extends BaseElement(HTMLElement) {
+class PollarisStore extends FullMixin(HTMLElement) {
   static get props() {
     return {
       db: {

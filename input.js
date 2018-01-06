@@ -1,4 +1,4 @@
-import BaseElement from './base-element.js';
+import FullMixin from './full-mixin.js';
 
 const template = `
 <style>
@@ -12,7 +12,7 @@ const template = `
 <input id="input" type="text" value="" on-change="onChange">
 `;
 
-class PollarisInput extends BaseElement(HTMLElement, template) {
+class PollarisInput extends FullMixin(HTMLElement, template) {
   static get props() {
     return {
       value: {
