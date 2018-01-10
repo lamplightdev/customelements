@@ -2,6 +2,7 @@ import FullMixin from './full-mixin.js';
 import PollarisRepeat from './repeat.js';
 
 import './dash.js';
+import './input.js';
 
 const template = `
 <style>
@@ -12,8 +13,6 @@ const template = `
   .output {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
   }
 </style>
 
@@ -21,6 +20,7 @@ const template = `
   <pollaris-dash></pollaris-dash>
 </template>
 
+<button on-click="rotate">Rotate</button>
 <div class="output"></div>
 `;
 
@@ -44,7 +44,19 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
   }
 
   initItemInstance(value, instance, index) {
-    const el = instance.querySelector('pollaris-dash')
+    const el = instance.querySelector('pollaris-dash');
+    el.width = value.width;
+    el.height = value.height;
+
+    this.on(el, 'dashresizeto', (event) => {
+      event.stopPropagation();
+
+      const foundIndex = this.items.findIndex(item => item === value);
+
+      this.fire('appdashresizeto', Object.assign({}, event.detail, {
+        index: foundIndex,
+      }));
+    });
 
     const content = document.createElement(value.element);
 
@@ -64,6 +76,10 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
 
   updateItemInstance(value, el, index) {
     return el;
+  }
+
+  rotate() {
+    this.fire('pollaris-dash');
   }
 }
 

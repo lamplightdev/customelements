@@ -4,6 +4,7 @@ const HelperMixin = (parentElement) => {
       super();
 
       this._loadedScripts = {};
+      this._helperBoundEvents = [];
     }
 
     connectedCallback() {
@@ -22,7 +23,15 @@ const HelperMixin = (parentElement) => {
           const attr = `on-${eventType}`;
 
           this.shadowRoot.querySelectorAll(`[${attr}]`).forEach((el) => {
-            this.on(el, eventType, this[el.getAttribute(attr)].bind(this));
+            const event = {
+              el,
+              eventType,
+              fn: this[el.getAttribute(attr)].bind(this),
+            };
+
+            this.on(el, eventType, event.fn);
+
+            this._helperBoundEvents.push(event);
           });
         });
       }
@@ -31,23 +40,9 @@ const HelperMixin = (parentElement) => {
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      if (this.shadowRoot) {
-        const eventTypes = [];
-        for (let property in this) {
-          const match = property.match(/^on(.*)/)
-          if (match) {
-            eventTypes.push(match[1]);
-          }
-        }
-
-        eventTypes.forEach((eventType) => {
-          const attr = `on-${eventType}`;
-
-          this.shadowRoot.querySelectorAll(`[${attr}]`).forEach((el) => {
-            this.off(el, eventType, this[el.getAttribute(attr)]);
-          });
-        });
-      }
+      this._helperBoundEvents.forEach((boundEvent) => {
+        this.off(boundEvent.el, boundEvent.eventType, boundEvent.fn);
+      });
     }
 
     on(el, type, func) {

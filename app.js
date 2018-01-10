@@ -120,12 +120,18 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         value: [{
           element: 'em',
           value: 'A',
+          width: 200,
+          height: 200,
         }, {
           element: 'h1',
           value: 'B',
+          width: 200,
+          height: 200,
         }, {
           element: 'pollaris-input',
           value: 'C',
+          width: 200,
+          height: 200,
         }],
         observeDashes: 'observeDashes',
       },
@@ -158,6 +164,7 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
     this.on(this, 'pollaris-usersignout', this.onUserSignOut);
     this.on(this, 'pollaris-storeupdate', this.onStoreUpdate);
     this.on(this, 'pollaris-dash', this.onDash);
+    this.on(this, 'appdashresizeto', this.onDashResizeTo);
 
     this.$('pollaris-route').update();
 
@@ -433,6 +440,20 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
     this.dashes = [this.dashes[2], this.dashes[0], this.dashes[1]];
     this.initPage5();
   }
+
+  onDashResizeTo(event) {
+    console.log(event.detail);
+    const { index, width, height } = event.detail;
+
+    this.dashes = this.dashes.slice(0, index)
+      .concat([Object.assign(this.dashes[index], {
+        width,
+        height,
+      })], this.dashes.slice(index + 1));
+
+    this.initPage5();
+  }
 }
+
 
 customElements.define('pollaris-app', PollarisApp);
