@@ -133,7 +133,7 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
           width: 200,
           height: 200,
         }],
-        observer: 'observeDashes',
+        // observer: 'observeDashes',
       },
 
       loading: {
