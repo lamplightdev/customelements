@@ -14,6 +14,10 @@ const template = `
     display: flex;
     flex-direction: row;
   }
+
+  pollaris-dash {
+    flex-grow: 1;
+  }
 </style>
 
 <template>
@@ -40,7 +44,10 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
   }
 
   getKey(value, index) {
-    return JSON.stringify(value);
+    return JSON.stringify(Object.assign({}, value, {
+      width: 0,
+      height: 0,
+    }));
   }
 
   initItemInstance(value, instance, index) {
@@ -75,6 +82,9 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
   }
 
   updateItemInstance(value, el, index) {
+    el.width = value.width;
+    el.height = value.height;
+
     return el;
   }
 

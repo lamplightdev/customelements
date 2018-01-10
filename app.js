@@ -25,7 +25,7 @@ const template = `
 
 <pollaris-store id="store-data" name="data"></pollaris-store>
 <pollaris-store id="store-list" name="list"></pollaris-store>
-<pollaris-store id="store-dashes" name="dash"></pollaris-store>
+<pollaris-store id="store-dashes" name="dashes"></pollaris-store>
 
 <pollaris-route defaultroute="page-1"></pollaris-route>
 
@@ -133,7 +133,7 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
           width: 200,
           height: 200,
         }],
-        observeDashes: 'observeDashes',
+        observer: 'observeDashes',
       },
 
       loading: {
@@ -442,7 +442,6 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
   }
 
   onDashResizeTo(event) {
-    console.log(event.detail);
     const { index, width, height } = event.detail;
 
     this.dashes = this.dashes.slice(0, index)
