@@ -1,11 +1,19 @@
-const PollarisRepeat = (parent) => {
+const PollarisRepeat = (parent, repeatProperty = 'items') => {
   return class extends parent {
     // TODO: key items?
+
+    getKey(item, index) {
+      return index;
+    }
+
+    initItemInstance(value, instance, index) {}
+    updateItemInstance(value, el, index) {}
 
     _addItem(template, value, output, index) {
       const instance = template.content.cloneNode(true);
 
-      this.initItemInstance(value, instance, index);
+      const repeatEl = this.initItemInstance(value, instance, index);
+      repeatEl.key = this.getKey(value, index);
 
       const eventTypes = [];
       for (let property in this) {
@@ -23,34 +31,76 @@ const PollarisRepeat = (parent) => {
         });
       });
 
-      output.appendChild(instance);
+      return instance;
+      //output.appendChild(instance);
     }
 
-    _updateItem(value, index) {
-      this.updateItemInstance(value, index);
+    _updateItem(el, value, index) {
+      return this.updateItemInstance(value, el, index);
     }
 
-    _removeItem(output, index) {
-      output.removeChild(output.children[index])
+    _removeItem(output, el) {
+      output.removeChild(el);
     }
 
     observeItems(oldValues, values) {
       const template = this.$('template');
       const output = this.$('.output');
 
-      values.forEach((value, index) => {
-        if (!output.children[index]) {
-          this._addItem(template, value, output, index);
-        } else if (value !== oldValues[index]) {
-          this._updateItem(value, index);
+      const keyedValues = values.map((value, index) => {
+        return {
+          ...value,
+          key: this.getKey(value, index),
+        };
+      })
+
+      const newKeys = keyedValues.map(value => value.key);
+      const existingKeys = [...output.children].map(el => el.key);
+
+      existingKeys.forEach((existingKey) => {
+        if (newKeys.indexOf(existingKey) === -1) {
+          const el = [...output.children].find(el => el.key === existingKey);
+          this._removeItem(output, el);
         }
       });
 
-      if (oldValues && oldValues.length > values.length) {
-        oldValues.slice(values.length).forEach(() => {
-          this._removeItem(output, output.children.length - 1);
-        });
-      }
+      const addedElements = [];
+      const updatedElements = [];
+      const orderedElements = [];
+
+      newKeys.forEach((newKey) => {
+        const index = keyedValues.findIndex(value => value.key === newKey);
+
+        let el;
+        if (existingKeys.indexOf(newKey) === -1) {
+          el = this._addItem(template, values[index], output, index);
+          addedElements.push(el);
+        } else {
+          const existingEl = [...output.children].find(el => el.key === newKey);
+          el = this._updateItem(existingEl, values[index], index);
+          updatedElements.push(el);
+        }
+
+        orderedElements.push(el);
+      });
+
+      orderedElements.forEach((newChild, index) => {
+        const existingChild = output.children[index];
+
+        if (existingChild) {
+          if (newChild.key !== existingChild.key) {
+            output.insertBefore(newChild, existingChild);
+            /*
+            if (addedElements.find(el => el === newChild)) {
+            } else { // if (updatedElements.find(el => el === newChild)) {
+              output
+            }
+            */
+          }
+        } else {
+          output.appendChild(newChild);
+        }
+      });
     }
   };
 };

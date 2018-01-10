@@ -38,12 +38,12 @@ class PollarisListItems extends PollarisRepeat(FullMixin(HTMLElement, template))
 
     test.due = item.due;
     test.content = item.content;
+
+    return instance.querySelector('div');
   }
 
-  updateItemInstance(item, index) {
-    const el = this.$$(`.output pollaris-listitem`)[index]
-    el.due = item.due;
-    el.content = item.content;
+  updateItemInstance(value, el, index) {
+    return el;
   }
 
   remove(item, index, event) {

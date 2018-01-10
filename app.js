@@ -25,6 +25,7 @@ const template = `
 
 <pollaris-store id="store-data" name="data"></pollaris-store>
 <pollaris-store id="store-list" name="list"></pollaris-store>
+<pollaris-store id="store-dashes" name="dash"></pollaris-store>
 
 <pollaris-route defaultroute="page-1"></pollaris-route>
 
@@ -39,6 +40,7 @@ const template = `
   <pollaris-page2 class="page" id="page-2"></pollaris-page2>
   <pollaris-page3 class="page" id="page-3"></pollaris-page3>
   <pollaris-page4 class="page" id="page-4"></pollaris-page4>
+  <pollaris-page5 class="page" id="page-5"></pollaris-page5>
 
   <slot></slot>
 </div>
@@ -82,6 +84,9 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         }, {
           id: 'page-4',
           name: 'Account',
+        }, {
+          id: 'page-5',
+          name: 'EventDash',
         }],
         observer: 'observePages',
       },
@@ -99,9 +104,30 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         type: Object,
         value: {
           name: 'Default',
-          items: ['1', '2', '3'],
+          items: [{
+            value: '1',
+          }, {
+            value: '2',
+          }, {
+            value: '3',
+          }],
         },
         observer: 'observeData',
+      },
+
+      dashes: {
+        type: Array,
+        value: [{
+          element: 'em',
+          value: 'A',
+        }, {
+          element: 'h1',
+          value: 'B',
+        }, {
+          element: 'pollaris-input',
+          value: 'C',
+        }],
+        observeDashes: 'observeDashes',
       },
 
       loading: {
@@ -131,6 +157,7 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
     this.on(this, 'pollaris-usersignin', this.onUserSignIn);
     this.on(this, 'pollaris-usersignout', this.onUserSignOut);
     this.on(this, 'pollaris-storeupdate', this.onStoreUpdate);
+    this.on(this, 'pollaris-dash', this.onDash);
 
     this.$('pollaris-route').update();
 
@@ -138,12 +165,19 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
 
     this.$id['store-data'].listen();
     this.$id['store-list'].listen();
+    this.$id['store-dashes'].listen();
 
-    const data = await this.$id['store-data'].retrieve();
-    const list = await this.$id['store-list'].retrieve();
+    let data = this.$id['store-data'].retrieve();
+    let list = this.$id['store-list'].retrieve();
+    let dashes = this.$id['store-dashes'].retrieve();
+
+    data = await data;
+    list = await list;
+    dashes = await dashes;
 
     if (data !== null) this.data = data;
     if (list !== null) this.list = list;
+    if (dashes !== null) this.dashes = dashes;
 
     this.loading = false;
   }
@@ -204,6 +238,9 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         case 'page-4':
           this.initPage4();
           break;
+        case 'page-5':
+          this.initPage5();
+          break;
         default:
           break;
       }
@@ -254,6 +291,17 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
       });
   }
 
+  initPage5() {
+    if (this.page !== 'page-5') return;
+
+    this.loadScript('./page5.js')
+      .then(() => {
+        const page5 = this.$('pollaris-page5');
+
+        page5.items = this.dashes;
+      });
+  }
+
   observePages(oldValue, value) {
     [...this.$$('pollaris-nav')]
       .map(el => el.items = value);
@@ -296,6 +344,16 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
 
     if (!fromInitialisation) {
       this.$('pollaris-store[name=list]').update(value);
+    }
+  }
+
+  observeDashes(oldValue, value, fromInitialisation = false) {
+    if (this.page === 'page-5') {
+      this.initPage5();
+    }
+
+    if (!fromInitialisation) {
+      this.$('pollaris-store[name=dashes]').update(value);
     }
   }
 
@@ -369,6 +427,11 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
 
   onUpdateRoute(event) {
     this.page = event.detail.route;
+  }
+
+  onDash(event) {
+    this.dashes = [this.dashes[2], this.dashes[0], this.dashes[1]];
+    this.initPage5();
   }
 }
 

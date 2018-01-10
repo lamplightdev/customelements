@@ -30,14 +30,18 @@ class PollarisItems extends PollarisRepeat(FullMixin(HTMLElement, template)) {
     };
   }
 
-  initItemInstance(item, instance) {
+  initItemInstance(value, instance, index) {
     const test = instance.querySelector('pollaris-test');
 
-    test.content = item;
+    test.content = value.value;
+
+    return test;
   }
 
-  updateItemInstance(item, index) {
-    this.$(`.output pollaris-test:nth-child(${index + 1})`).content = item;
+  updateItemInstance(value, el, index) {
+    el.content = value.value;
+
+    return el;
   }
 }
 

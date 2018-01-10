@@ -40,10 +40,6 @@ class PollarisPage4 extends FullMixin(HTMLElement, template) {
     };
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
   observeUser(oldValue, value) {
     if (value) {
       this.classList.add('signed-in');

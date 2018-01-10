@@ -57,6 +57,8 @@ class PollarisNav extends PollarisRepeat(FullMixin(HTMLElement, template)) {
     link.setAttribute('href', `#${item.id}`);
     link.textContent = item.name;
     link.id = item.id;
+
+    return link;
   }
 
   navigate(item, index, event) {
@@ -66,8 +68,6 @@ class PollarisNav extends PollarisRepeat(FullMixin(HTMLElement, template)) {
       pageId: item.id,
     });
   }
-
-  updateItemInstance(item, index) {}
 }
 
 customElements.define('pollaris-nav', PollarisNav);
