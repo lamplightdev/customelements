@@ -1,125 +1,81 @@
 const PropertyMixin = (parentElement, template = false) => {
   return class extends parentElement {
+    static get props() { }
+
     static get observedAttributes() {
-      return this.props ? Object.keys(this.props) : [];
+      return Object.keys(this.props);
     }
 
     constructor() {
       super();
 
       this._props = {};
+      this._ignoreNextAttributeChange = {};
 
-      if (this.constructor.props) {
-        Object.keys(this.constructor.props).forEach((propName) => {
-          this._props[propName] = Object.assign({}, this.constructor.props[propName]);
-
-          let value;
-          if (typeof this[propName] !== 'undefined') {
-            value = this[propName];
-          } else {
-            value = this.constructor.props[propName].value
-          }
-
-          // define property setter and getter after we have accessed raw property above
-          Object.defineProperty(this, propName, {
-            get: () => { return this._props[propName].value; },
-            set: (value) => { this.set(propName, value); },
-          });
-
-          this.set(propName, value, !this.hasAttribute(propName), true);
+      Object.keys(this.constructor.props).forEach((propName) => {
+        Object.defineProperty(this, propName, {
+          get: () => { return this._props[propName]; },
+          set: (value) => { this.set(propName, value); },
         });
-      }
+
+        this[propName] = this.constructor.props[propName].value;
+      });
     }
 
-    set(propName, value, allowReflection = true, fromInitialisation = false) {
-      if (allowReflection && this._props[propName].reflectToAttribute) {
-
-        let adjustedNewValue = value;
-
-        switch (this._props[propName].type) {
-          case String:
-            adjustedNewValue = `${value}`;
-            break;
+    attributeChangedCallback(name, oldValue, newValue) {
+      if (!this._ignoreNextAttributeChange[name]) {
+        switch (this.constructor.props[name].type) {
           case Number:
-            adjustedNewValue = Number(value);
+            this[name] = Number(newValue);
             break;
           case Boolean:
-            adjustedNewValue = !!value;
+            this[name] = newValue === null ? false : true;
             break;
-          case Object: case Array:
-            adjustedNewValue = JSON.stringify(value);
+          case Array: case Object:
+            this[name] = JSON.parse(newValue);
             break;
           default:
+            this[name] = newValue;
             break;
         }
+      }
 
-        if (this._props[propName].type === Boolean) {
-          if (adjustedNewValue) {
-            this.setAttribute(propName, '');
-          } else {
+      this._ignoreNextAttributeChange[name] = false;
+    }
+
+    set(propName, value) {
+      const oldValue = this._props[propName];
+
+      this._props[propName] = value;
+
+      if (oldValue !== this[propName]) {
+        if (this.constructor.props[propName].reflectToAttribute) {
+          this._ignoreNextAttributeChange[propName] = true;
+
+          if (this[propName] === null) {
             this.removeAttribute(propName);
+          } else {
+            switch (this.constructor.props[propName].type) {
+              case Boolean:
+                if (this[propName]) {
+                  this.setAttribute(propName, '');
+                } else {
+                  this.removeAttribute(propName)
+                }
+                break;
+              case Array: case Object:
+                this.setAttribute(propName, JSON.stringify(this[propName]));
+                break;
+              default:
+                this.setAttribute(propName, this[propName]);
+                break;
+            }
           }
-        } else {
-          this.setAttribute(propName, adjustedNewValue);
         }
 
-        if (fromInitialisation) {
-          // attributeChangedCallback isn't called on initialisation of an attribute
-          // so ensure it's set here
-          this.setProp(propName, this[propName], value, true);
+        if (this.constructor.props[propName].observer) {
+          this[this.constructor.props[propName].observer](oldValue, this[propName]);
         }
-      } else {
-        this.setProp(propName, this[propName], value, fromInitialisation);
-      }
-    }
-
-    setProp(propName, oldValue, value, fromInitialisation = false) {
-      if (!fromInitialisation && oldValue === value) return;
-
-      let adjustedNewValue = value;
-
-      switch (this._props[propName].type) {
-        case String:
-          adjustedNewValue = `${value}`;
-          break;
-        case Number:
-          adjustedNewValue = Number(value);
-          break;
-        case Boolean:
-          adjustedNewValue = !!value;
-          break;
-        default:
-          break;
-      }
-
-      this._props[propName].value = adjustedNewValue;
-
-      if (this[this._props[propName].observer]) {
-        this[this._props[propName].observer](oldValue, this[propName], fromInitialisation);
-      }
-    }
-
-    attributeChangedCallback(name, oldValue, value) {
-      switch (this._props[name].type) {
-        case Boolean: {
-          let adjustedOldValue = oldValue;
-          let adjustedNewValue = value;
-          if (adjustedOldValue !== undefined) {
-            adjustedOldValue = adjustedOldValue === '' ? true : false;
-          }
-          if (adjustedNewValue !== undefined) {
-            adjustedNewValue = adjustedNewValue === '' ? true : false;
-          }
-          this.setProp(name, adjustedOldValue, adjustedNewValue);
-          break;
-        }
-        case Object: case Array: {
-          this.setProp(name, JSON.parse(oldValue), JSON.parse(value));
-          break;
-        }
-        default:
-          this.setProp(name, oldValue, value);
-          break;
       }
     }
   }
