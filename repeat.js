@@ -13,7 +13,12 @@ const PollarisRepeat = (parent, repeatProperty = 'items') => {
     }
 
     initItemInstance(value, instance, index) {}
-    updateItemInstance(value, el, index) {}
+
+    updateItemInstance(value, el, index) {
+      return el;
+    }
+
+    updateItemProps(el, item) {}
 
     _addItem(template, value, output, index) {
       const instance = template.content.cloneNode(true);
@@ -47,7 +52,7 @@ const PollarisRepeat = (parent, repeatProperty = 'items') => {
         });
       });
 
-      return instance;
+      return repeatEl;
     }
 
     _updateItem(el, value, index) {
@@ -108,6 +113,8 @@ const PollarisRepeat = (parent, repeatProperty = 'items') => {
         } else {
           output.appendChild(newChild);
         }
+
+        this.updateItemProps(newChild, values[index]);
       });
     }
   };

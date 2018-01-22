@@ -46,6 +46,13 @@ class PollarisListItems extends PollarisRepeat(FullMixin(HTMLElement, template))
     return el;
   }
 
+  updateItemProps(el, item) {
+    const test = el.querySelector('pollaris-listitem');
+
+    test.due = item.due;
+    test.content = item.content;
+  }
+
   remove(item, index, event) {
     this.fire(`pollaris-removefromlist`, {
       index,

@@ -21,13 +21,14 @@ class PollarisListItem extends FullMixin(HTMLElement, template) {
 
       content: {
         type: String,
-        value: '',
+        value: 'dsd',
         observer: 'observeContent',
       },
     };
   }
 
   observeDue(oldValue, value) {
+    console.log(value);
     this.$id['due'].textContent = value;
   }
 

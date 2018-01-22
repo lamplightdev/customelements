@@ -18,7 +18,9 @@ const PropertyMixin = (parentElement, template = false) => {
           set: (value) => { this.set(propName, value); },
         });
 
-        this[propName] = this.constructor.props[propName].value;
+        if (!this.hasAttribute(propName)) {
+          this[propName] = this.constructor.props[propName].value;
+        }
       });
     }
 

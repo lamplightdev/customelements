@@ -6,7 +6,12 @@ class PollarisStore extends FullMixin(HTMLElement) {
       db: {
         type: Object,
         value: null,
-      }
+      },
+      debounceduration: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true,
+      },
     };
   }
 
@@ -51,10 +56,16 @@ class PollarisStore extends FullMixin(HTMLElement) {
   }
 
   update(store) {
-    return this.db
-      .collection(this.getAttribute('name'))
-      .doc('me')
-      .set(store);
+    cancelAnimationFrame(this.timer);
+
+    this.timer = setTimeout(() => {
+      this.db
+        .collection(this.getAttribute('name'))
+        .doc('me')
+        .set(store);
+    }, this.debounceduration);
+
+    return
 
     /*
     return Promise.resolve().then(() => {

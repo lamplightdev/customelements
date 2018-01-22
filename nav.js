@@ -43,11 +43,17 @@ class PollarisNav extends PollarisRepeat(FullMixin(HTMLElement, template)) {
 
   observeActive(oldValue, value) {
     if (oldValue) {
-      this.$(`a#${oldValue}`).classList.remove('active');
+      const el = this.$(`a#${oldValue}`);
+      if (el) {
+        el.classList.remove('active');
+      }
     }
 
     if (value) {
-      this.$(`a#${value}`).classList.add('active');
+      const el = this.$(`a#${value}`);
+      if (el) {
+        el.classList.add('active');
+      }
     }
   }
 

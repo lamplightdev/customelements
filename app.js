@@ -25,7 +25,7 @@ const template = `
 
 <pollaris-store id="store-data" name="data"></pollaris-store>
 <pollaris-store id="store-list" name="list"></pollaris-store>
-<pollaris-store id="store-dashes" name="dashes"></pollaris-store>
+<pollaris-store id="store-dashinfo" name="dashinfo" debounceduration="5000"></pollaris-store>
 
 <pollaris-route defaultroute="page-1"></pollaris-route>
 
@@ -41,6 +41,7 @@ const template = `
   <pollaris-page3 class="page" id="page-3"></pollaris-page3>
   <pollaris-page4 class="page" id="page-4"></pollaris-page4>
   <pollaris-page5 class="page" id="page-5"></pollaris-page5>
+  <pollaris-page6 class="page" id="page-6"></pollaris-page6>
 
   <slot></slot>
 </div>
@@ -87,6 +88,9 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         }, {
           id: 'page-5',
           name: 'EventDash',
+        }, {
+          id: 'page-6',
+          name: 'League',
         }],
         observer: 'observePages',
       },
@@ -115,25 +119,49 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         observer: 'observeData',
       },
 
-      dashes: {
-        type: Array,
-        value: [{
-          element: 'em',
-          value: 'A',
-          width: 200,
-          height: 200,
-        }, {
-          element: 'h1',
-          value: 'B',
-          width: 200,
-          height: 200,
-        }, {
-          element: 'pollaris-input',
-          value: 'C',
-          width: 200,
-          height: 200,
-        }],
-        // observer: 'observeDashes',
+      leagueitems: {
+        type: Object,
+        value: {
+          items: [{
+            id: 1,
+            value: 'A',
+          }, {
+            id: 2,
+            value: 'B',
+          }, {
+            id: 3,
+            value: 'C',
+          }],
+        },
+      },
+
+      dashinfo: {
+        type: Object,
+        value: {
+          dashes: [{
+            element: 'em',
+            value: 'A',
+            width: 20,
+            height: 200,
+            x: 0,
+            y: 0,
+          }, {
+            element: 'h1',
+            value: 'B',
+            width: 20,
+            height: 200,
+            x: 0,
+            y: 0,
+          }, {
+            element: 'pollaris-input',
+            value: 'C',
+            width: 20,
+            height: 200,
+            x: 0,
+            y: 0,
+          }],
+        },
+        // observer: 'observeDashInfo',
       },
 
       loading: {
@@ -165,6 +193,7 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
     this.on(this, 'pollaris-storeupdate', this.onStoreUpdate);
     this.on(this, 'pollaris-dash', this.onDash);
     this.on(this, 'appdashresizeto', this.onDashResizeTo);
+    this.on(this, 'appdashmoveto', this.onDashMoveTo);
 
     this.$('pollaris-route').update();
 
@@ -172,19 +201,19 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
 
     this.$id['store-data'].listen();
     this.$id['store-list'].listen();
-    this.$id['store-dashes'].listen();
+    this.$id['store-dashinfo'].listen();
 
     let data = this.$id['store-data'].retrieve();
     let list = this.$id['store-list'].retrieve();
-    let dashes = this.$id['store-dashes'].retrieve();
+    let dashinfo = this.$id['store-dashinfo'].retrieve();
 
     data = await data;
     list = await list;
-    dashes = await dashes;
+    dashinfo = await dashinfo;
 
     if (data !== null) this.data = data;
     if (list !== null) this.list = list;
-    if (dashes !== null) this.dashes = dashes;
+    if (dashinfo !== null) this.dashinfo = dashinfo;
 
     this.loading = false;
   }
@@ -248,6 +277,9 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         case 'page-5':
           this.initPage5();
           break;
+        case 'page-6':
+          this.initPage6();
+          break;
         default:
           break;
       }
@@ -305,7 +337,18 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
       .then(() => {
         const page5 = this.$('pollaris-page5');
 
-        page5.items = this.dashes;
+        page5.items = this.dashinfo.dashes;
+      });
+  }
+
+  initPage6() {
+    if (this.page !== 'page-6') return;
+
+    this.loadScript('./page6.js')
+      .then(() => {
+        const page6 = this.$('pollaris-page6');
+
+        page6.items = this.leagueitems.items;
       });
   }
 
@@ -354,13 +397,13 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
     }
   }
 
-  observeDashes(oldValue, value, fromInitialisation = false) {
+  observeDashInfo(oldValue, value, fromInitialisation = false) {
     if (this.page === 'page-5') {
       this.initPage5();
     }
 
     if (!fromInitialisation) {
-      this.$('pollaris-store[name=dashes]').update(value);
+      this.$('pollaris-store[name=dashinfo]').update(value);
     }
   }
 
@@ -401,6 +444,9 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
         case 'data':
           this.data = data;
           break;
+        case 'dashinfo':
+          this.dashinfo = data;
+          break;
         default:
           break;
       };
@@ -437,18 +483,36 @@ class PollarisApp extends FullMixin(HTMLElement, template) {
   }
 
   onDash(event) {
-    this.dashes = [this.dashes[2], this.dashes[0], this.dashes[1]];
+    this.dashinfo = {
+      dashes: [this.dashinfo.dashes[2], this.dashinfo.dashes[0], this.dashinfo.dashes[1]],
+    };
     this.initPage5();
   }
 
   onDashResizeTo(event) {
     const { index, width, height } = event.detail;
 
-    this.dashes = this.dashes.slice(0, index)
-      .concat([Object.assign(this.dashes[index], {
-        width,
-        height,
-      })], this.dashes.slice(index + 1));
+    this.dashinfo = {
+      dashes: this.dashinfo.dashes.slice(0, index)
+        .concat([Object.assign(this.dashinfo.dashes[index], {
+          width,
+          height,
+        })], this.dashinfo.dashes.slice(index + 1)),
+     };
+
+    this.initPage5();
+  }
+
+  onDashMoveTo(event) {
+    const { index, x, y } = event.detail;
+
+    this.dashinfo = {
+      dashes: this.dashinfo.dashes.slice(0, index)
+        .concat([Object.assign(this.dashinfo.dashes[index], {
+          x,
+          y,
+        })], this.dashinfo.dashes.slice(index + 1)),
+    };
 
     this.initPage5();
   }

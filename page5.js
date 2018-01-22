@@ -11,12 +11,12 @@ const template = `
   }
 
   .output {
-    display: flex;
-    flex-direction: row;
+    position: relative;
   }
 
   pollaris-dash {
-    flex-grow: 1;
+    position: absolute;
+    background-color: white;
   }
 </style>
 
@@ -39,6 +39,10 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
     };
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
   observeItems(oldValue, value) {
     super.observeItems(oldValue, value);
   }
@@ -47,6 +51,8 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
     return JSON.stringify(Object.assign({}, value, {
       width: 0,
       height: 0,
+      x: 0,
+      y: 0,
     }));
   }
 
@@ -54,13 +60,29 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
     const el = instance.querySelector('pollaris-dash');
     el.width = value.width;
     el.height = value.height;
+    el.x = value.x;
+    el.y = value.y;
 
     this.on(el, 'dashresizeto', (event) => {
       event.stopPropagation();
 
-      const foundIndex = this.items.findIndex(item => item === value);
+      const key = this.getKey(value);
+      const foundIndex = this.items
+        .findIndex(item => this.getKey(item) === key);
 
       this.fire('appdashresizeto', Object.assign({}, event.detail, {
+        index: foundIndex,
+      }));
+    });
+
+    this.on(el, 'dashmoveto', (event) => {
+      event.stopPropagation();
+
+      const key = this.getKey(value);
+      const foundIndex = this.items
+        .findIndex(item => this.getKey(item) === key);
+
+      this.fire('appdashmoveto', Object.assign({}, event.detail, {
         index: foundIndex,
       }));
     });
@@ -84,6 +106,8 @@ class PollarisPage5 extends PollarisRepeat(FullMixin(HTMLElement, template)) {
   updateItemInstance(value, el, index) {
     el.width = value.width;
     el.height = value.height;
+    el.x = value.x;
+    el.y = value.y;
 
     return el;
   }
